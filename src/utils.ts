@@ -5,7 +5,7 @@ import blake from 'blakejs';
 import bs58 from 'bs58';
 import is from 'is_js';
 
-export const checkAddressValidity = (address) => {
+export function checkAddressValidity(address: string): boolean {
   try {
     const bytes = bs58.decode(address);
     const size = bytes.length;
@@ -17,20 +17,20 @@ export const checkAddressValidity = (address) => {
   } catch (e) {
     return false;
   }
-};
+}
 
-export const pkFromAddress = (ergoAdress) => {
+export function pkFromAddress(address: string): string {
   if (
-    is.not.string(ergoAdress)
+    is.not.string(address)
   ) {
-    throw new TypeError(`Bad params: ${ergoAdress}`);
+    throw new TypeError(`Bad params: ${address}`);
   }
 
-  const addrBytes = bs58.decode(ergoAdress);
+  const addrBytes = bs58.decode(address);
   return addrBytes.slice(1, 34);
-};
+}
 
-export const intToVlq = (num) => {
+export function intToVlq(num: number) {
   let x = num;
   let res = Buffer.from([]);
   let r;
@@ -42,9 +42,9 @@ export const intToVlq = (num) => {
   r = (x & 0x7F);
   res = Buffer.concat([res, Buffer.from([r], null, 1)]);
   return res;
-};
+}
 
-export const outputBytes = (out, tokenIds) => {
+export function outputBytes(out, tokenIds) {
   let res = intToVlq(out.value);
   res = Buffer.concat([res, Buffer.from(out.ergoTree, 'hex')]);
   res = Buffer.concat([res, intToVlq(out.creationHeight)]);
@@ -59,11 +59,14 @@ export const outputBytes = (out, tokenIds) => {
   const k = out.additionalRegisters.length;
   res = Buffer.concat([res, intToVlq(k)]);
   return res;
-};
+}
 
-export const valueSerialize = (a) => '';
+// TODO implement
+export function valueSerialize(_) {
+  return ''
+}
 
-export const inputBytes = (i) => {
+export function inputBytes(i) {
   let res = Buffer.from(i.boxId, 'hex');
   const sp = i.spendingProof;
   res = Buffer.concat([res, intToVlq(sp.proofBytes.length)]);
@@ -76,9 +79,9 @@ export const inputBytes = (i) => {
   });
 
   return res;
-};
+}
 
-export const distinctTokenList = (outputs) => {
+export function distinctTokenList(outputs) {
   const tokenList = outputs.map((x) => x.assets.map((a) => a.tokenId));
   const flatTokenList = tokenList.flat();
   const seenTokens = new Set();
@@ -91,22 +94,22 @@ export const distinctTokenList = (outputs) => {
     }
   }
   return res;
-};
+}
 
-export const sortBoxes = (boxes) => {
+export function sortBoxes(boxes) {
   const sortableKeys = Object.keys(boxes).sort((a, b) => boxes[b].value - boxes[a].value);
   return sortableKeys.map((k) => boxes[k]);
-};
+}
 
-export const getTenBoxesOrCurrent = (currBoxes, allBoxes) => {
+export function getTenBoxesOrCurrent(currBoxes, allBoxes) {
   if (currBoxes.length > 10) {
     return currBoxes;
   }
 
   return currBoxes.concat(allBoxes.slice(currBoxes.length, 10));
-};
+}
 
-export const serializeTx = (tx) => {
+export function serializeTx(tx) {
   let res = intToVlq(tx.inputs.length);
 
   Object.values(tx.inputs).forEach((v) => {
@@ -132,17 +135,12 @@ export const serializeTx = (tx) => {
   });
 
   return res;
-};
+}
 
-/**
- *
- * @param {String} address
- * @returns {String}
- */
-export const ergoTreeFromAddress = (address) => {
+export function ergoTreeFromAddress(address: string): string {
   if (!checkAddressValidity(address)) {
     throw new TypeError(`Bad params:${address}`);
   }
   return Buffer.concat([Buffer.from([0x00, 0x08, 0xcd]), pkFromAddress(address)])
     .toString('hex');
-};
+}
