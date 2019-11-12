@@ -24,6 +24,7 @@ export class Address {
     return addrBytes.slice(1, 34);
   }
 
+  // todo support non-pk addresses
   static ergoTreeFromAddress(address: string): string {
     if (!this.checkAddressValidity(address)) {
       throw new TypeError(`Bad params:${address}`);
