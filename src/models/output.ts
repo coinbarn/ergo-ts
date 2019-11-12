@@ -1,4 +1,4 @@
-declare const Address;
+import {Address} from "../address";
 
 export class Output {
 
