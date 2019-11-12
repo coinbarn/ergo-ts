@@ -1,0 +1,81 @@
+{
+  "name": "@ergoplatform/ergo-ts",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "repository": "https://github.com/ergoplatform/ergo-ts",
+  "dependencies": {
+    "axios": "0.19.0",
+    "blakejs": "^1.1.0",
+    "bn.js": "^4.11.8",
+    "bs58": "^4.0.1",
+    "elliptic": "^6.4.1",
+    "is_js": "^0.9.0",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/plugin-proposal-pipeline-operator": "^7.3.2",
+    "@babel/plugin-transform-async-to-generator": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@types/jest": "^24.0.22",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
+    "axios-mock-adapter": "^1.16.0",
+    "babel-eslint": "^10.0.2",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-lodash": "^3.3.4",
+    "codecov": "^3.5.0",
+    "core-js": "^3.1.4",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-fbjs": "^3.1.0",
+    "eslint-loader": "^3.0.2",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jest": "^22.7.1",
+    "eslint-plugin-lodash-fp": "^2.2.0-a1",
+    "eslint-plugin-no-for-of-loops": "^1.0.0",
+    "jest": "^24.9.0",
+    "node-loader": "^0.6.0",
+    "terser-webpack-plugin": "^1.3.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "majestic": {
+    "jestScriptPath": "../node_modules/jest/bin/jest.js",
+    "args": [
+      "--config=./jest.config.js"
+    ],
+    "env": {
+      "CI": "true"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "webpack --mode production",
+    "size": "npm run build && size-limit",
+    "styleFix": "npx eslint -c .eslintrc.yml ./src ./tests ---ext .js,.ts,.tsx --fix",
+    "styleFix2": "npx eslint -c .eslintrc.yml ./src ./tests --fix --ext .js,.ts"
+  },
+  "author": "Ergoplatform",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ergoplatform/ergo-ts/issues"
+  },
+  "homepage": "https://github.com/ergoplatform/ergo-ts",
+  "browserslist": [
+    "defaults"
+  ]
+}
