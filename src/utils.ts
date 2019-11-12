@@ -1,9 +1,9 @@
 declare const Buffer;
 declare const Object;
 declare const Set;
-import blake from 'blakejs';
-import bs58 from 'bs58';
-import is from 'is_js';
+import * as blake from 'blakejs';
+import * as bs58 from 'bs58';
+import * as is from 'is_js';
 
 export function checkAddressValidity(address: string): boolean {
   try {
