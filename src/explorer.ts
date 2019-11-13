@@ -2,8 +2,6 @@ import axios, {AxiosInstance} from "axios";
 import {Output} from "./models/output";
 import {Transaction} from "./models/transaction";
 
-declare const console;
-
 /**
  * Class to interact with explorer
  */

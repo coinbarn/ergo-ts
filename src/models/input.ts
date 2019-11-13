@@ -11,7 +11,8 @@ export class Input {
   }
 
   static formObject(obj): Input {
-    return new Input(obj.boxId, obj.spendingProof)
+    const id = obj.id || obj.boxId;
+    return new Input(id, new SpendingProof(obj.spendingProof))
   }
 
 

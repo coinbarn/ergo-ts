@@ -1,6 +1,7 @@
 import {Output} from "./models/output";
 import {Input} from "./models/input";
 import {Transaction} from "./models/transaction";
+import * as flat from 'array.prototype.flat'
 
 declare const Buffer;
 declare const Object;
@@ -42,10 +43,11 @@ export class Serializer {
   }
 
   static transactionToBytes(tx: Transaction) {
+
     let res = this.intToVlq(tx.inputs.length);
 
-    Object.values(tx.inputs).forEach((v) => {
-      res = Buffer.concat([res, this.inputToBytes(Input.formObject(v))]);
+    Object.values(tx.inputs).forEach((input) => {
+      res = Buffer.concat([res, this.inputToBytes(input)]);
     });
     res = Buffer.concat([res, this.intToVlq(tx.dataInputs.length)]);
 
@@ -69,9 +71,9 @@ export class Serializer {
     return res;
   }
 
-  protected static distinctTokenList(outputs) {
-    const tokenList = outputs.map((x) => x.assets.map((a) => a.tokenId));
-    const flatTokenList = tokenList.flat();
+  protected static distinctTokenList(outputs: Output[]) {
+    // todo use flatMap after switching to es2019
+    const flatTokenList = flat(Array.from(outputs).map((x) => x.assets.map((a) => a.tokenId)));
     const seenTokens = new Set();
     const res = [];
     for (let i = 0; i < flatTokenList.length; i += 1) {

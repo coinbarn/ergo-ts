@@ -21,7 +21,8 @@ export class Output {
   }
 
   static formObject(obj): Output {
-    return new Output(obj.id, obj.value, obj.creationHeight, new Address(obj.address), obj.assets, obj.additionalRegisters)
+    const id = obj.id || obj.boxId;
+    return new Output(id, obj.value, obj.creationHeight, new Address(obj.address), obj.assets, obj.additionalRegisters)
   }
 
 }
