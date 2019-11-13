@@ -1,4 +1,4 @@
-import { Address } from '../src/address';
+import { Address } from '../src/models/address';
 
 test('simple address validity test', () => {
   const addresses = [
@@ -16,7 +16,7 @@ test('simple address validity test', () => {
   ];
 
   addresses.forEach((address) => {
-    expect(Address.checkAddressValidity(address[0]))
+    expect(new Address(address[0]).isValid())
       .toBe(address[1]);
   });
 });

@@ -6,7 +6,7 @@ test('get data from explorer', async () => {
 
   const ex = Explorer.mainnet;
   // console.log(await ex.getCurrentHeight());
-  const outs = await ex.getUnspentOutputs(address)
+  const outs = await ex.getUnspentOutputs(address);
   console.log(outs.map((o) => o.assets.map((a) => a.amount)));
 
 });
