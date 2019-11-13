@@ -1,5 +1,7 @@
 import axios, {AxiosInstance} from "axios";
 import {Output} from "./models/output";
+import {Transaction} from "./models/transaction";
+
 declare const console;
 
 /**
@@ -41,13 +43,20 @@ export class Explorer {
   }
 
   async getUnspentOutputs(address: string): Promise<Output[]> {
-
     const {data} = await this.client({
       url: `/transactions/boxes/byAddress/unspent/${address}`,
       method: 'GET',
     });
 
     return data.map((o) => Output.formObject(o));
+  };
+
+  async broadcastTx(signedTransaction: Transaction) {
+    return await this.client({
+      method: 'POST',
+      url: '/transactions/send',
+      data: signedTransaction,
+    });
   };
 
 

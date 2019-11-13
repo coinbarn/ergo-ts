@@ -20,3 +20,29 @@ test('simple address validity test', () => {
       .toBe(address[1]);
   });
 });
+
+test('address from sk', () => {
+  const testCases = [
+    {
+      sk: '8e6993a4999f009c03d9457ffcf8ff3d840ae78332c959c8e806a53fbafbbee1',
+      address: '9gsLq5a12nJe33nKtjMe7NPY7o8CQAtjS9amDgALbebv1wmRXrv',
+      mainnet: true,
+    },
+    {
+      sk: 'ff00',
+      address: '9gU3czAt9q4fQPRWBriBbpfLbRP7JrXRmB7kowtwdyw66PMRmaY',
+      mainnet: true,
+    },
+    {
+      sk: '8e6993a4999f009c03d9457ffcf8ff3d840ae78332c959c8e806a53fbafbbee1',
+      address: '3WxxVQqxoVSWEKG5B73eNttBX51ZZ6WXLW7fiVDgCFhzRK8R4gmk',
+      mainnet: false,
+    },
+  ];
+
+  testCases.forEach((o) => {
+    expect(Address.fromSk(o.sk, o.mainnet).address)
+      .toBe(o.address);
+  });
+
+});
