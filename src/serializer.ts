@@ -5,7 +5,7 @@ import {Transaction} from "./models/transaction";
 declare const Buffer;
 declare const Object;
 declare const Number;
-c
+
 export class Serializer {
 
   static outputToBytes(out: Output, tokenIds) {
