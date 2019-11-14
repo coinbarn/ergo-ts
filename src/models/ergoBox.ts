@@ -2,6 +2,9 @@ import {Address} from "./address";
 import {Input} from "./input";
 import {SpendingProof} from "./spending-proof";
 import {feeValue} from "../constants";
+import {Serializer} from "../serializer";
+
+declare const Buffer;
 
 export class ErgoBox {
 
@@ -50,6 +53,20 @@ export class ErgoBox {
     return new Input(this.id, SpendingProof.empty);
   }
 
+  static encodeRegisters(obj) {
+    const encoded = {};
+    for (let i = 4; i <= 10; i += 1) {
+      const reg = obj['R' + i];
+      if (reg !== undefined) {
+        const byteArray = this.toHex(reg);
+        const b1 = Buffer.from([0x0e]);
+        const b2 = Buffer.from(Serializer.intToVlq(byteArray.length / 2)).toString('hex');
+        encoded['R' + i] = b1.toString('hex') + b2 + byteArray;
+      }
+    }
+    return encoded;
+  }
+
   static getSolvingBoxes(myBoxes: ErgoBox[], meaningfulOutputs: ErgoBox[], min = 15): ErgoBox[] {
     const value = meaningfulOutputs.reduce((sum, {value}) => sum + value, 0) + feeValue;
     const assets = this.extractAssets(meaningfulOutputs);
@@ -87,6 +104,16 @@ export class ErgoBox {
   static sort(boxes) {
     const sortableKeys = Object.keys(boxes).sort((a, b) => boxes[b].value - boxes[a].value);
     return sortableKeys.map((k) => boxes[k]);
+  }
+
+  private static toHex(sin) {
+    // utf8 to latin1
+    const s = unescape(encodeURIComponent(sin));
+    let h = '';
+    for (let i = 0; i < s.length; i++) {
+      h += s.charCodeAt(i).toString(16);
+    }
+    return h
   }
 
 }

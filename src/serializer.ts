@@ -103,6 +103,7 @@ export class Serializer {
     return res;
   }
 
+  // todo ?
   protected static valueSerialize(v: string) {
     return Buffer.from([]);
   }

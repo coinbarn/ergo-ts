@@ -37,11 +37,11 @@ export class Client {
       amount: amountInt
     };
     // Reminder: serializedByteArrayInRegister = '\x0e' + intToVlq(bytearray.length) + byteArray
-    const registers = {
+    const registers = ErgoBox.encodeRegisters({
       R4: name,
       R5: description,
       R6: decimals,
-    };
+    });
     const payloadOutsWithTokens = [new ErgoBox('', feeValue, height, sender, [token], registers)];
     const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOutsWithTokens);
     const signedTx = unsignedTx.sign(sk);
