@@ -23,7 +23,7 @@ export class Serializer {
     const k = Object.keys(out.additionalRegisters).length;
     res = Buffer.concat([res, this.intToVlq(k)]);
     for (let i = 4; i < k+4; i += 1) {
-      res = Buffer.concat([res, this.valueSerialize(out.additionalRegisters['R'+i])]);
+      res = Buffer.concat([res, Buffer.from(out.additionalRegisters['R'+i]i, 'hex')]);
     }
     return res;
   }
@@ -103,7 +103,7 @@ export class Serializer {
   }
 
   protected static valueSerialize(v: string) {
-    return Buffer.from(v, 'hex');
+    return Buffer.from([]);
   }
 
 }

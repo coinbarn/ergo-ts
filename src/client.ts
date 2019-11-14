@@ -36,6 +36,7 @@ export class Client {
       tokenId: boxesToSpend[0].id,
       amount: amountInt
     };
+    // Reminder: serializedByteArrayInRegister = '\x0e' + intToVlq(bytearray.length) + byteArray
     const registers = {
       R4: name,
       R5: description,
