@@ -8,6 +8,7 @@ test('serialization test vector', () => {
   const mainnetTx = Transaction.formObject(JSON.parse(mainnetTxJsonStr));
   // todo test binary representation
 
+  // todo add other tests from https://github.com/ergoplatform/ergo/blob/master/src/test/scala/org/ergoplatform/modifiers/mempool/ErgoTransactionSpec.scala#L32
   const testVectors = [
     {
       bytesToSign: '02c95c2ccf55e03cac6659f71ca4df832d28e2375569cec178dcb17f3e2e5f77420000ca796a4fc9c0d746a69702a77bd78b1a80a5ef5bf5713bbd95d93a4f23b27ead00000000028094ebdc030008cd0326df75ea615c18acc6bb4b517ac82795872f388d5d180aac90eaa84de750b942e8070000c0843d1005040004000e36100204cf0f08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304e8070000',
