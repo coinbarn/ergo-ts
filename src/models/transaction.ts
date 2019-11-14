@@ -31,6 +31,18 @@ export class Transaction {
     return new Transaction(boxesToSpend.map((b) => b.toInput()), outputs, [])
   }
 
+  static formObject(obj): Transaction {
+    const inputs = obj.inputs.map((i) => Input.formObject(i));
+    const outputs = obj.outputs.map((i) => ErgoBox.formObject(i));
+    return new Transaction(inputs, outputs)
+  }
+
+  sign(sk: string): Transaction {
+    // todo
+    return this;
+  }
+
+
   private static createFee(payloadOutputs: ErgoBox[], height: number): ErgoBox[] {
     if (payloadOutputs.find((o) => o.address == constants.feeMainnetAddress || o.address == constants.feeTestnetAddress)) {
       return [];
@@ -55,12 +67,5 @@ export class Transaction {
 
     return outputs;
   };
-
-
-  static formObject(obj): Transaction {
-    const inputs = obj.inputs.map((i) => Input.formObject(i));
-    const outputs = obj.outputs.map((i) => ErgoBox.formObject(i));
-    return new Transaction(inputs, outputs)
-  }
 
 }

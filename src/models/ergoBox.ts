@@ -1,6 +1,7 @@
 import {Address} from "./address";
 import {Input} from "./input";
 import {SpendingProof} from "./spending-proof";
+import {feeValue} from "../constants";
 
 export class ErgoBox {
 
@@ -41,12 +42,51 @@ export class ErgoBox {
       }
     }
 
-    return Object.entries(assetDict).map((x) => ({ tokenId: x[0], amount: x[1] }));
+    return Object.entries(assetDict).map((x) => ({tokenId: x[0], amount: x[1]}));
   };
 
 
   public toInput(): Input {
     return new Input(this.id, SpendingProof.empty);
+  }
+
+  static getSolvingBoxes(myBoxes: ErgoBox[], meaningfulOutputs: ErgoBox[], min: number = 15): ErgoBox[] {
+    const value = meaningfulOutputs.reduce((sum, {value}) => sum + value, 0) + feeValue;
+    const assets = this.extractAssets(meaningfulOutputs);
+
+    const remains = {ERG: value};
+    assets.forEach((a) => {
+      remains[a.tokenId] = (remains[a.tokenId] || 0) + a.amount;
+    });
+
+    const boxesToSpend = [];
+    const sortedBoxes = this.sortBoxes(myBoxes);
+    for (const box of sortedBoxes) {
+      boxesToSpend.push(box);
+      if (remains.ERG > 0) {
+        remains.ERG -= box.value;
+      }
+      box.assets.forEach((a) => {
+        if (remains[a.tokenId] > 0) {
+          remains[a.tokenId] -= box.value;
+        }
+      });
+      const positiveRemainingToken = Object.values(remains).find((o) => o > 0);
+
+      if (positiveRemainingToken === undefined) {
+        if (boxesToSpend.length > min) {
+          return boxesToSpend
+        } else {
+          return boxesToSpend.concat(sortedBoxes.slice(boxesToSpend.length, min));
+        }
+      }
+    }
+    return null;
+  };
+
+  private static sortBoxes(boxes) {
+    const sortableKeys = Object.keys(boxes).sort((a, b) => boxes[b].value - boxes[a].value);
+    return sortableKeys.map((k) => boxes[k]);
   }
 
 }

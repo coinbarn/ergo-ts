@@ -1,6 +1,7 @@
 import axios, {AxiosInstance} from "axios";
 import {ErgoBox} from "./models/ergoBox";
 import {Transaction} from "./models/transaction";
+import {Address} from "./models/address";
 
 /**
  * Class to interact with explorer
@@ -40,9 +41,9 @@ export class Explorer {
     return items[0].height;
   }
 
-  async getUnspentOutputs(address: string): Promise<ErgoBox[]> {
+  async getUnspentOutputs(address: Address): Promise<ErgoBox[]> {
     const {data} = await this.client({
-      url: `/transactions/boxes/byAddress/unspent/${address}`,
+      url: `/transactions/boxes/byAddress/unspent/${address.address}`,
       method: 'GET',
     });
 
