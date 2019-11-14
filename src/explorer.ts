@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from "axios";
-import {Output} from "./models/output";
+import {ErgoBox} from "./models/ergoBox";
 import {Transaction} from "./models/transaction";
 
 /**
@@ -40,13 +40,13 @@ export class Explorer {
     return items[0].height;
   }
 
-  async getUnspentOutputs(address: string): Promise<Output[]> {
+  async getUnspentOutputs(address: string): Promise<ErgoBox[]> {
     const {data} = await this.client({
       url: `/transactions/boxes/byAddress/unspent/${address}`,
       method: 'GET',
     });
 
-    return data.map((o) => Output.formObject(o));
+    return data.map((o) => ErgoBox.formObject(o));
   };
 
   async broadcastTx(signedTransaction: Transaction) {

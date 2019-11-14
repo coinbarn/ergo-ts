@@ -1,4 +1,4 @@
-import {Output} from "./models/output";
+import {ErgoBox} from "./models/ergoBox";
 import {Input} from "./models/input";
 import {Transaction} from "./models/transaction";
 import * as flat from 'array.prototype.flat'
@@ -9,7 +9,7 @@ declare const Number;
 
 export class Serializer {
 
-  static outputToBytes(out: Output, tokenIds) {
+  static outputToBytes(out: ErgoBox, tokenIds) {
     let res = this.intToVlq(out.value);
     res = Buffer.concat([res, Buffer.from(out.ergoTree, 'hex')]);
     res = Buffer.concat([res, this.intToVlq(out.creationHeight)]);
@@ -71,7 +71,8 @@ export class Serializer {
     return res;
   }
 
-  protected static distinctTokenList(outputs: Output[]) {
+  // todo (?) merge with ErgoBox.extractAssets()
+  protected static distinctTokenList(outputs: ErgoBox[]) {
     // todo use flatMap after switching to es2019
     const flatTokenList = flat(Array.from(outputs).map((x) => x.assets.map((a) => a.tokenId)));
     const seenTokens = new Set();
@@ -100,7 +101,7 @@ export class Serializer {
     return res;
   }
 
-  // TODO implement
+  // TODO implementi
   protected static valueSerialize(_) {
     return ''
   }
