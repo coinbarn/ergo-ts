@@ -5,6 +5,7 @@ import * as  ec from 'elliptic';
 const {curve} = ec.ec('secp256k1');
 
 declare const Buffer;
+declare const console;
 
 export class Address {
 
@@ -40,8 +41,12 @@ export class Address {
   }
 
   get ergoTree(): string {
-    return Buffer.concat([Buffer.from([0x00, 0x08, 0xcd]), this.publicKey])
-      .toString('hex');
+    if(this.isP2PK()) {
+      return Buffer.concat([Buffer.from([0x00, 0x08, 0xcd]), this.publicKey])
+        .toString('hex');
+    } else {
+      return this.addrBytes.slice(1, this.addrBytes.length - 4).toString('hex')
+    }
   }
 
   isValid(): boolean {
@@ -60,6 +65,10 @@ export class Address {
 
   isMainnet(): boolean {
     return this.headByte() < 16
+  }
+
+  isP2PK(): boolean {
+    return this.headByte() == 1 || this.headByte() == 17
   }
 
   private headByte()  {

@@ -4,6 +4,7 @@ import * as constants from './testConstants.js';
 const testVectors = [
   {
     address: '9fRusAarL1KkrWQVsxSRVYnvWxaAT2A96cKtNn9tvPh5XUyCisr',
+    ergoTree: '0008cd0278011ec0cf5feb92d61adb51dcb75876627ace6fd9446ab4cabc5313ab7b39a7',
     isMainnet: true,
     isValid: true,
   },
@@ -27,6 +28,7 @@ const testVectors = [
   },
   {
     address: '2Z4YBkDsDvQj8BX7xiySFewjitqp2ge9c99jfes2whbtKitZTxdBYqbrVZUvZvKv6aqn9by4kp3LE1c26LCyosFnVnm6b6U1JYvWpYmL2ZnixJbXLjWAWuBThV1D6dLpqZJYQHYDznJCk49g5TUiS4q8khpag2aNmHwREV7JSsypHdHLgJT7MGaw51aJfNubyzSKxZ4AJXFS27EfXwyCLzW1K6GVqwkJtCoPvrcLqmqwacAWJPkmh78nke9H4oT88XmSbRt2n9aWZjosiZCafZ4osUDxmZcc5QVEeTWn8drSraY3eFKe8Mu9MSCcVU',
+    ergoTree: '101004020e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a7017300730110010204020404040004c0fd4f05808c82f5f6030580b8c9e5ae040580f882ad16040204c0944004c0f407040004000580f882ad16d19683030191a38cc7a7019683020193c2b2a57300007473017302830108cdeeac93a38cc7b2a573030001978302019683040193b1a5730493c2a7c2b2a573050093958fa3730673079973089c73097e9a730a9d99a3730b730c0599c1a7c1b2a5730d00938cc7b2a5730e0001a390c1a7730f',
     isMainnet: true,
     isValid: true,
   },
@@ -68,16 +70,14 @@ const testVectors = [
   return o;
 });
 
-
 test('get ergoTree by address', () => {
   testVectors.forEach((tv) => {
-    expect(tv.address.ergoTree)
-      .toBe(tv.ergoTree);
+    if (tv.ergoTree) {
+      expect(tv.address.ergoTree)
+        .toBe(tv.ergoTree);
+    }
   });
-
-
 });
-
 
 test('check isMainnet/testnet', () => {
   testVectors.forEach((tv) => {
