@@ -2,60 +2,46 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const buildFile = {
-  devtool: 'source-map',
-  entry: './src/index.js',
+  entry: './src/client.ts',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'ergo.js',
     library: 'ergo',
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/, // Regular expression
-        exclude: /(node_modules|bower_components)/, // excluded node_modules
-        use: {
-          loader: 'babel-loader',
-        },
-      },
-    ],
-  },
-  optimization: {
-    minimizer: [new TerserPlugin(
-      {
-        test: /\.js(\?.*)?$/i,
-      }
-    )],
-  },
 };
 
 const npmFile = {
-  entry: './src/index.js',
-  devtool: 'source-map',
+  entry: './src/client.ts',
   output: {
     path: path.resolve(__dirname, './'),
-    filename: 'index.js',
+    filename: 'client.js',
     library: 'ergo',
     libraryTarget: 'umd',
     umdNamedDefine: true,
   },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
   module: {
     rules: [
       {
-        test: /\.js$/, // Regular expression
-        exclude: /(node_modules|bower_components)/, // excluded node_modules
-        use: {
-          loader: 'babel-loader',
-        },
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
     ],
-  },
-  optimization: {
-    minimizer: [new TerserPlugin(
-      {
-        test: /\.js(\?.*)?$/i,
-      }
-    )],
   },
 };
 
