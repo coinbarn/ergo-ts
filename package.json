@@ -2,7 +2,7 @@
   "name": "@ergoplatform/ergo-js2",
   "version": "2.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "client.ts",
   "publishConfig": {
     "access": "public"
   },
