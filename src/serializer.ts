@@ -30,7 +30,7 @@ export class Serializer {
   static inputToBytes(input: Input) {
     let res = Buffer.from(input.boxId, 'hex');
     const sp = input.spendingProof;
-    res = Buffer.concat([res, this.intToVlq(sp.proofBytes.length)]);
+    res = Buffer.concat([res, this.intToVlq(sp.proofBytes.length >> 1)]);
     res = Buffer.concat([res, Buffer.from(sp.proofBytes, 'hex')]);
     res = Buffer.concat([res, this.intToVlq(Object.keys(sp.extension).length)]);
 
