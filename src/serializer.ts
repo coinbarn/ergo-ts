@@ -1,6 +1,7 @@
 import {ErgoBox} from "./models/ergoBox";
 import {Input} from "./models/input";
 import {Transaction} from "./models/transaction";
+import * as flat from 'array.prototype.flat'
 
 declare const Buffer;
 declare const Object;
@@ -23,7 +24,7 @@ export class Serializer {
     const k = Object.keys(out.additionalRegisters).length;
     res = Buffer.concat([res, this.intToVlq(k)]);
     for (let i = 4; i < k+4; i += 1) {
-      res = Buffer.concat([res, Buffer.from(out.additionalRegisters['R'+i]i, 'hex')]);
+      res = Buffer.concat([res, Buffer.from(out.additionalRegisters['R'+i], 'hex')]);
     }
     return res;
   }
@@ -75,7 +76,7 @@ export class Serializer {
   // todo (?) merge with ErgoBox.extractAssets()
   protected static distinctTokenList(outputs: ErgoBox[]): Array<string> {
     // todo use flatMap after switching to es2019
-    const flatTokenList = outputs.flatMap((output) => output.assets.map((asset) => asset.tokenId));
+    const flatTokenList = flat(outputs.map((output) => output.assets.map((asset) => asset.tokenId)));
     const seenTokens = new Set();
     const res = [];
     for (let i = 0; i < flatTokenList.length; i += 1) {
