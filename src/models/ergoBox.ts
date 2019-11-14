@@ -60,7 +60,7 @@ export class ErgoBox {
     });
 
     const boxesToSpend = [];
-    const sortedBoxes = this.sortBoxes(myBoxes);
+    const sortedBoxes = this.sort(myBoxes);
     for (const box of sortedBoxes) {
       boxesToSpend.push(box);
       if (remains.ERG > 0) {
@@ -84,7 +84,7 @@ export class ErgoBox {
     return null;
   };
 
-  private static sortBoxes(boxes) {
+  static sort(boxes) {
     const sortableKeys = Object.keys(boxes).sort((a, b) => boxes[b].value - boxes[a].value);
     return sortableKeys.map((k) => boxes[k]);
   }
