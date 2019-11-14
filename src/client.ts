@@ -9,7 +9,7 @@ export class Client {
   private ex: Explorer;
   readonly unitsInOneErgo = 1000000000;
 
-  constructor(explorerUri: string = 'https://api.ergoplatform.com') {
+  constructor(explorerUri = 'https://api.ergoplatform.com') {
     this.ex = new Explorer(explorerUri);
   }
 

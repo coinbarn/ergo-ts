@@ -75,6 +75,6 @@ export class Transaction {
     }
 
     return outputs;
-  };
+  }
 
 }

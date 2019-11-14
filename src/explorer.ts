@@ -48,7 +48,7 @@ export class Explorer {
     });
 
     return data.map((o) => ErgoBox.formObject(o));
-  };
+  }
 
   async broadcastTx(signedTransaction: Transaction) {
     return await this.client({
@@ -56,7 +56,7 @@ export class Explorer {
       url: '/transactions/send',
       data: signedTransaction,
     });
-  };
+  }
 
 
 }

@@ -1,8 +1,8 @@
 export class SpendingProof {
-  proofBytes: String;
-  extension: Object;
+  proofBytes: string;
+  extension: Record<string, any>;
 
-  constructor(proofBytes: string, extension: Object = {}) {
+  constructor(proofBytes: string, extension: Record<string, any> = {}) {
     this.proofBytes = proofBytes;
     this.extension = extension;
   }

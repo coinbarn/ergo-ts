@@ -43,14 +43,14 @@ export class ErgoBox {
     }
 
     return Object.entries(assetDict).map((x) => ({tokenId: x[0], amount: x[1]}));
-  };
+  }
 
 
   public toInput(): Input {
     return new Input(this.id, SpendingProof.empty);
   }
 
-  static getSolvingBoxes(myBoxes: ErgoBox[], meaningfulOutputs: ErgoBox[], min: number = 15): ErgoBox[] {
+  static getSolvingBoxes(myBoxes: ErgoBox[], meaningfulOutputs: ErgoBox[], min = 15): ErgoBox[] {
     const value = meaningfulOutputs.reduce((sum, {value}) => sum + value, 0) + feeValue;
     const assets = this.extractAssets(meaningfulOutputs);
 
@@ -82,7 +82,7 @@ export class ErgoBox {
       }
     }
     return null;
-  };
+  }
 
   static sort(boxes) {
     const sortableKeys = Object.keys(boxes).sort((a, b) => boxes[b].value - boxes[a].value);
