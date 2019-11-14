@@ -21,9 +21,11 @@ export class Serializer {
       res = Buffer.concat([res, this.intToVlq(n)]);
       res = Buffer.concat([res, this.intToVlq(out.assets[i].amount)]);
     }
-    // todo: const k = out.additionalRegisters.length;
-    const k = 0;
+    const k = Object.keys(out.additionalRegisters).length;
     res = Buffer.concat([res, this.intToVlq(k)]);
+    for (let i = 4; i < k+4; i += 1) {
+      res = Buffer.concat([res, this.valueSerialize(out.additionalRegisters['R'+i])]);
+    }
     return res;
   }
 
@@ -101,9 +103,8 @@ export class Serializer {
     return res;
   }
 
-  // TODO implementi
-  protected static valueSerialize(_) {
-    return ''
+  protected static valueSerialize(v: string) {
+    return Buffer.from(v, 'hex');
   }
 
 }
