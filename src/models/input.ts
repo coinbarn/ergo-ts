@@ -5,7 +5,7 @@ export class Input {
   boxId: string;
   spendingProof: SpendingProof;
 
-  constructor(boxId: string, spendingProof: SpendingProof) {
+  constructor(boxId: string, spendingProof: SpendingProof = new SpendingProof('') ) {
     this.boxId = boxId;
     this.spendingProof = spendingProof;
   }

@@ -37,8 +37,9 @@ export class Transaction {
 
   static formObject(obj): Transaction {
     const inputs = obj.inputs.map((i) => Input.formObject(i));
+    const dataInputs = obj.dataInputs === undefined ? [] : obj.dataInputs.map((i) => new Input(i.boxId));
     const outputs = obj.outputs.map((i) => ErgoBox.formObject(i));
-    return new Transaction(inputs, outputs)
+    return new Transaction(inputs, outputs, dataInputs)
   }
 
   sign(sk: string): Transaction {
