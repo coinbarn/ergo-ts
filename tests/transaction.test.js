@@ -1,4 +1,4 @@
-import * as  constants from './testConstants.js';
+import * as constants from './testConstants.js';
 import { ErgoBox } from '../src/models/ergoBox';
 import { Transaction } from '../src/models/transaction';
 

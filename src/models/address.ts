@@ -9,9 +9,11 @@ declare const Buffer;
 export class Address {
 
   address: string;
+  addrBytes;
 
   constructor(address: string) {
     this.address = address;
+    this.addrBytes = bs58.decode(this.address);
   }
 
   static fromPk(pk: string, mainnet: boolean = true): Address {
@@ -25,7 +27,6 @@ export class Address {
       .slice(0, 38);
 
     return new Address(bs58.encode(address));
-
   }
 
   static fromSk(sk: string, mainnet: boolean = true): Address {
@@ -35,11 +36,9 @@ export class Address {
   }
 
   get publicKey(): string {
-    const addrBytes = bs58.decode(this.address);
-    return addrBytes.slice(1, 34);
+    return this.addrBytes.slice(1, 34);
   }
 
-  // todo rework to be able to work with scripts
   get ergoTree(): string {
     return Buffer.concat([Buffer.from([0x00, 0x08, 0xcd]), this.publicKey])
       .toString('hex');
@@ -58,6 +57,15 @@ export class Address {
       return false;
     }
   }
+
+  isMainnet(): boolean {
+    return this.headByte() < 16
+  }
+
+  private headByte()  {
+    return this.addrBytes[0];
+  }
+
 
 
 }
