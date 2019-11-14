@@ -3,15 +3,17 @@ import {Address} from "./models/address";
 import {ErgoBox} from "./models/ergoBox";
 import {Transaction} from "./models/transaction";
 
-class App {
+export class Client {
 
   private ex: Explorer;
+  readonly unitsInOneErgo = 1000000000;
 
-  constructor(ex: Explorer = Explorer.mainnet) {
-    this.ex = ex;
+  constructor(explorerUri: string = 'https://api.ergoplatform.com') {
+    this.ex = new Explorer(explorerUri);
   }
 
-  async sendErgs(recipient: string, amount: number, sk: string) {
+  async sendErgs(recipient: string, amountDouble: number, sk: string) {
+    const amount = amountDouble * this.unitsInOneErgo;
     const sender: Address = Address.fromSk(sk);
     const myBoxes = await this.ex.getUnspentOutputs(sender);
     const height = await this.ex.getCurrentHeight();

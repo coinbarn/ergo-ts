@@ -2,6 +2,10 @@ import {ErgoBox} from "./ergoBox";
 import {Input} from "./input";
 import {Address} from "./address";
 import * as  constants from '../constants.js';
+import {Serializer} from "../serializer";
+import {sign} from "../ergoSchnorr";
+import * as BN from 'bn.js';
+import {SpendingProof} from "./spending-proof";
 
 export class Transaction {
 
@@ -38,10 +42,14 @@ export class Transaction {
   }
 
   sign(sk: string): Transaction {
-    // todo
-    return this;
+    const serializeTransaction = Serializer.transactionToBytes(this);
+    const signedInputs = this.inputs.map((input) => {
+      const proofBytes = sign(serializeTransaction, new BN(sk, 16));
+      const sp = new SpendingProof(proofBytes.toString('hex'));
+      return new Input(input.boxId, sp)
+    });
+    return new Transaction(signedInputs, this.outputs, this.dataInputs);
   }
-
 
   private static createFee(payloadOutputs: ErgoBox[], height: number): ErgoBox[] {
     if (payloadOutputs.find((o) => o.address == constants.feeMainnetAddress || o.address == constants.feeTestnetAddress)) {
