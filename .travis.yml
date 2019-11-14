@@ -10,7 +10,7 @@ install:
 
 script:
   - yarn test
-#  - yarn build
+  - yarn build
 
 after_success:
   - codecov

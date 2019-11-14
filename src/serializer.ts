@@ -43,12 +43,12 @@ export class Serializer {
   }
 
   static transactionToBytes(tx: Transaction) {
-
     let res = this.intToVlq(tx.inputs.length);
 
     Object.values(tx.inputs).forEach((input) => {
       res = Buffer.concat([res, this.inputToBytes(input)]);
     });
+
     res = Buffer.concat([res, this.intToVlq(tx.dataInputs.length)]);
 
     tx.dataInputs.forEach((i) => {

@@ -12,8 +12,6 @@ test('from outputs', () => {
   const payloadOutputs = [new ErgoBox('', tokensToTransfer, 0, recipient)];
   const tx = Transaction.fromOutputs(boxesToSpend, payloadOutputs);
 
-  console.log(tx.outputs);
-
   const totalValueOut = tx.outputs.reduce((sum, { value }) => sum + value, 0);
   expect(totalValueIn)
     .toEqual(totalValueOut);
