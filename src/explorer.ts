@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from "axios";
+import axios, {AxiosInstance, AxiosRequestConfig} from "axios";
 import {ErgoBox} from "./models/ergoBox";
 import {Transaction} from "./models/transaction";
 import {Address} from "./models/address";
@@ -8,21 +8,21 @@ import {Address} from "./models/address";
  */
 export class Explorer {
 
-  private url: string;
-  private timeout: number = 1000 * 5;
-  private headers = {
+  protected url: string;
+  protected timeout: number = 1000 * 5;
+  protected headers = {
     'Content-Type': 'application/json',
   };
-  private client: AxiosInstance;
+  readonly apiClient: AxiosInstance;
 
   constructor(url: string) {
     this.url = url;
-    this.client = axios.create({
+    this.apiClient = axios.create({
       baseURL: url,
       timeout: this.timeout,
       headers: this.headers,
     });
-    this.client.interceptors.response.use(
+    this.apiClient.interceptors.response.use(
       (response) => Promise.resolve(response),
       (error) => Promise.reject(new Error(error.response || {})),
     );
@@ -33,28 +33,33 @@ export class Explorer {
   public static readonly mainnet: Explorer = new Explorer('https://api.ergoplatform.com');
 
   async getCurrentHeight(): Promise<number> {
-    const {data: {items}} = await this.client({
-      url: '/blocks?limit=1',
-      method: 'GET',
-    });
+    const {data: {items}} = await this.getRequest(`/blocks?limit=1`);
 
     return items[0].height;
   }
 
   async getUnspentOutputs(address: Address): Promise<ErgoBox[]> {
-    const {data} = await this.client({
-      url: `/transactions/boxes/byAddress/unspent/${address.address}`,
-      method: 'GET',
-    });
+    const {data} = await this.getRequest(`/transactions/boxes/byAddress/unspent/${address.address}`);
 
     return data.map((o) => ErgoBox.formObject(o));
   }
 
   async broadcastTx(signedTransaction: Transaction) {
-    return await this.client({
+    return await this.postRequest('/transactions/send', signedTransaction)
+  }
+
+  protected async postRequest(url: string, data) {
+    return await this.apiClient({
       method: 'POST',
-      url: '/transactions/send',
-      data: signedTransaction,
+      url: url,
+      data: data,
+    });
+  }
+
+  protected async getRequest(url: string) {
+    return await this.apiClient({
+      method: 'GET',
+      url: url,
     });
   }
 
