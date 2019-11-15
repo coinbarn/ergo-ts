@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosRequestConfig} from "axios";
+import axios, {AxiosInstance} from "axios";
 import {ErgoBox} from "./models/ergoBox";
 import {Transaction} from "./models/transaction";
 import {Address} from "./models/address";
@@ -42,6 +42,13 @@ export class Explorer {
     const {data} = await this.getRequest(`/transactions/boxes/byAddress/unspent/${address.address}`);
 
     return data.map((o) => ErgoBox.formObject(o));
+  }
+
+  async getTokenInfo(tokenId: string): Promise<ErgoBox> {
+    const {data} = await this.getRequest(`/transactions/boxes/${tokenId}`);
+    const {data: {outputs}} = await this.getRequest(`/transactions/${data.spentTransactionId}`);
+    const parsedOutputs: ErgoBox[] = outputs.map((o) => ErgoBox.formObject(o));
+    return parsedOutputs.find((o) => o.assets.find((a) => a.tokenId == tokenId) !== undefined);
   }
 
   async broadcastTx(signedTransaction: Transaction) {

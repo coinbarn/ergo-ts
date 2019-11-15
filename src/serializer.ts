@@ -23,8 +23,8 @@ export class Serializer {
     }
     const k = Object.keys(out.additionalRegisters).length;
     res = Buffer.concat([res, this.intToVlq(k)]);
-    for (let i = 4; i < k+4; i += 1) {
-      res = Buffer.concat([res, Buffer.from(out.additionalRegisters['R'+i], 'hex')]);
+    for (let i = 4; i < k + 4; i += 1) {
+      res = Buffer.concat([res, Buffer.from(out.additionalRegisters['R' + i], 'hex')]);
     }
     return res;
   }
@@ -102,6 +102,28 @@ export class Serializer {
     res = Buffer.concat([res, Buffer.from([r], null, 1)]);
     return res;
   }
+
+  static stringToHex(sin: string) {
+    // utf8 to latin1
+    const s = unescape(encodeURIComponent(sin));
+    let h = '';
+    for (let i = 0; i < s.length; i++) {
+      h += s.charCodeAt(i).toString(16);
+    }
+    return h
+  }
+
+  static stringFromHex(str: string) {
+    var j;
+    var hexes = str.match(/.{1,4}/g) || [];
+    var back = "";
+    for (j = 0; j < hexes.length; j++) {
+      back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+
+    return back;
+  }
+
 
   // todo ?
   protected static valueSerialize(v: string) {

@@ -2,7 +2,10 @@ import {Explorer} from "./explorer";
 import {Address} from "./models/address";
 import {ErgoBox} from "./models/ergoBox";
 import {Transaction} from "./models/transaction";
-import {feeValue} from "./constants";
+import {feeValue, minBoxValue} from "./constants";
+import {Serializer} from "./serializer";
+
+declare const console;
 
 export class Client {
 
@@ -16,8 +19,7 @@ export class Client {
   async transfer(recipient: string, amount: number, sk: string) {
     const amountInt = amount * this.unitsInOneErgo;
     const height = await this.explorer.getCurrentHeight();
-    const sender: Address = Address.fromSk(sk);
-    const myBoxes = await this.explorer.getUnspentOutputs(sender);
+    const myBoxes = await this.explorer.getUnspentOutputs(Address.fromSk(sk));
     const payloadOuts = [new ErgoBox('', amountInt, height, new Address(recipient))];
     const boxesToSpend = ErgoBox.getSolvingBoxes(myBoxes, payloadOuts);
     const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOuts);
@@ -26,7 +28,23 @@ export class Client {
   }
 
   async tokenTransfer(recipient: string, tokenId: string, amount: number, sk: string) {
-
+    const tokenInfo = await this.explorer.getTokenInfo(tokenId);
+    const R6: string = tokenInfo.additionalRegisters['R6'];
+    const decimals = Number(Serializer.stringFromHex(R6.slice(4, R6.length)));
+    const height = await this.explorer.getCurrentHeight();
+    const amountInt = amount * Math.pow(10, decimals);
+    const tokens = [
+      {
+        tokenId: tokenId,
+        amount: amountInt
+      }
+    ];
+    const payloadOuts = [new ErgoBox('', minBoxValue, height, new Address(recipient), tokens)];
+    const myBoxes = await this.explorer.getUnspentOutputs(Address.fromSk(sk));
+    const boxesToSpend = ErgoBox.getSolvingBoxes(myBoxes, payloadOuts);
+    const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOuts);
+    const signedTx = unsignedTx.sign(sk);
+    return await this.explorer.broadcastTx(signedTx)
   }
 
   async tokenIssue(name: string, amount: number, decimals: number, description: string, sk: string) {
@@ -46,7 +64,7 @@ export class Client {
       R5: description,
       R6: decimals,
     });
-    const payloadOutsWithTokens = [new ErgoBox('', feeValue, height, sender, [token], registers)];
+    const payloadOutsWithTokens = [new ErgoBox('', minBoxValue, height, sender, [token], registers)];
     const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOutsWithTokens);
     const signedTx = unsignedTx.sign(sk);
     return await this.explorer.broadcastTx(signedTx)

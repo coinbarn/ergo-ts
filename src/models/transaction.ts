@@ -6,6 +6,7 @@ import {Serializer} from "../serializer";
 import {sign} from "../ergoSchnorr";
 import * as BN from 'bn.js';
 import {SpendingProof} from "./spending-proof";
+import {minBoxValue} from "../constants";
 
 export class Transaction {
 
@@ -66,11 +67,23 @@ export class Transaction {
     const totalValueOut = restOutputs.reduce((sum, {value}) => sum + value, 0);
     const outputs = [];
 
-    const changeAssets = ErgoBox.extractAssets(boxesToSpend);
+    const assetsIn = ErgoBox.extractAssets(boxesToSpend);
+    const assetsMap = { };
+    assetsIn.forEach((a) => {
+      assetsMap[a.tokenId] = (assetsMap[a.tokenId] || 0) + a.amount;
+    });
+    ErgoBox.extractAssets(restOutputs).forEach((a) => {
+      assetsMap[a.tokenId] -= a.amount
+    });
+    const changeAssets = [];
+    Object.keys(assetsMap).forEach((k) => {
+      changeAssets.push({tokenId: k, amount: assetsMap[k]})
+    });
+
     const changeAmount = totalValueIn - totalValueOut;
-    if (changeAmount > 0) {
+    if (changeAmount > minBoxValue) {
       outputs.push(new ErgoBox('', changeAmount, height, changeAddress, changeAssets, {}));
-    } else if (changeAmount < 0 || changeAssets.length > 0) {
+    } else if (changeAmount != 0 || assetsIn.length > 0) {
       throw new Error('Insufficient funds');
     }
 
