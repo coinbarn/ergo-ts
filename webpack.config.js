@@ -25,7 +25,7 @@ const npmFile = {
   entry: './src/client.ts',
   output: {
     path: path.resolve(__dirname, './'),
-    filename: 'client.js',
+    filename: 'index.js',
     library: 'ergo',
     libraryTarget: 'umd',
     umdNamedDefine: true,
