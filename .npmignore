@@ -24,3 +24,4 @@ yarn.error.log
 package-lock.json
 .travis.yml
 /coverage
+.idea

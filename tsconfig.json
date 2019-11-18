@@ -7,12 +7,11 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declaration": false,
+    "declaration": true,
+    "outDir": "./distr",
     "typeRoots": ["node_modules/@types"]
   },
-  "include": [
-    "./src/**/*"
-  ],
+  "include": ["src"],
   "exclude": [
     "node_modules"
   ]

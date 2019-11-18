@@ -1,12 +1,12 @@
 declare const Buffer;
 import * as blake from 'blakejs';
-import * as ec from 'elliptic';
 import * as BN from 'bn.js';
-import * as secureRandom from "secure-random";
+import * as ec from 'elliptic';
+import * as secureRandom from 'secure-random';
 
-const {curve} = ec.ec('secp256k1');
+const { curve } = ec.ec('secp256k1');
 
-const numHash = (s) => {
+const numHash = s => {
   const KEY = null;
   const OUTPUT_LENGTH = 32;
   const context = blake.blake2bInit(OUTPUT_LENGTH, KEY);
@@ -39,7 +39,10 @@ const tryToSign = (msgBytes, sk) => {
   if (c.isZero()) {
     return null;
   }
-  const z = sk.mul(c).add(y).umod(curve.n);
+  const z = sk
+    .mul(c)
+    .add(y)
+    .umod(curve.n);
   const cb = Buffer.from(c.toArray('big', 24));
   const zb = Buffer.from(z.toArray('big', 32));
 

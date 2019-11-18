@@ -1,15 +1,14 @@
-import {ErgoBox} from "./models/ergoBox";
-import {Input} from "./models/input";
-import {Transaction} from "./models/transaction";
-import * as flat from 'array.prototype.flat'
+import * as flat from 'array.prototype.flat';
+import { ErgoBox } from './models/ergoBox';
+import { Input } from './models/input';
+import { Transaction } from './models/transaction';
 
 declare const Buffer;
 declare const Object;
 declare const Number;
 
 export class Serializer {
-
-  static outputToBytes(out: ErgoBox, tokenIds) {
+  public static outputToBytes(out: ErgoBox, tokenIds) {
     let res = this.intToVlq(out.value);
     res = Buffer.concat([res, Buffer.from(out.ergoTree, 'hex')]);
     res = Buffer.concat([res, this.intToVlq(out.creationHeight)]);
@@ -29,14 +28,14 @@ export class Serializer {
     return res;
   }
 
-  static inputToBytes(input: Input) {
+  public static inputToBytes(input: Input) {
     let res = Buffer.from(input.boxId, 'hex');
     const sp = input.spendingProof;
     res = Buffer.concat([res, this.intToVlq(sp.proofBytes.length >> 1)]);
     res = Buffer.concat([res, Buffer.from(sp.proofBytes, 'hex')]);
     res = Buffer.concat([res, this.intToVlq(Object.keys(sp.extension).length)]);
 
-    Object.keys(sp.extension).forEach((k) => {
+    Object.keys(sp.extension).forEach(k => {
       res += this.intToVlq(Number(k));
       res += this.valueSerialize(sp.extension[k]);
     });
@@ -44,16 +43,16 @@ export class Serializer {
     return res;
   }
 
-  static transactionToBytes(tx: Transaction) {
+  public static transactionToBytes(tx: Transaction) {
     let res = this.intToVlq(tx.inputs.length);
 
-    Object.values(tx.inputs).forEach((input) => {
+    Object.values(tx.inputs).forEach(input => {
       res = Buffer.concat([res, this.inputToBytes(input)]);
     });
 
     res = Buffer.concat([res, this.intToVlq(tx.dataInputs.length)]);
 
-    tx.dataInputs.forEach((i) => {
+    tx.dataInputs.forEach(i => {
       res = Buffer.concat([res, Buffer.from(i.boxId, 'hex')]);
     });
 
@@ -61,62 +60,46 @@ export class Serializer {
 
     res = Buffer.concat([res, this.intToVlq(distinctIds.length)]);
 
-    Object.values(distinctIds).forEach((v) => {
+    Object.values(distinctIds).forEach(v => {
       res = Buffer.concat([res, Buffer.from(v, 'hex')]);
     });
 
     res = Buffer.concat([res, this.intToVlq(tx.outputs.length)]);
-    Object.values(tx.outputs).forEach((v) => {
+    Object.values(tx.outputs).forEach(v => {
       res = Buffer.concat([res, this.outputToBytes(v, distinctIds)]);
     });
 
     return res;
   }
 
-  // todo (?) merge with ErgoBox.extractAssets()
-  protected static distinctTokenList(outputs: ErgoBox[]): Array<string> {
-    // todo use flatMap after switching to es2019
-    const flatTokenList = flat(outputs.map((output) => output.assets.map((asset) => asset.tokenId)));
-    const seenTokens = new Set();
-    const res = [];
-    for (let i = 0; i < flatTokenList.length; i += 1) {
-      const currId = flatTokenList[i];
-      if (!(seenTokens.has(currId))) {
-        res.push(currId);
-        seenTokens.add(currId);
-      }
-    }
-    return res;
-  }
-
-  static intToVlq(num: number): string {
+  public static intToVlq(num: number): string {
     let x = num;
     let res = Buffer.from([]);
     let r;
-    while (parseInt(String(x / (2 ** 7)), 10)) {
-      r = x & 0x7F;
-      x = parseInt(String(x / (2 ** 7)), 10);
-      res = Buffer.concat([res, Buffer.from([(r | 0x80)], null, 1)]);
+    while (parseInt(String(x / 2 ** 7), 10)) {
+      r = x & 0x7f;
+      x = parseInt(String(x / 2 ** 7), 10);
+      res = Buffer.concat([res, Buffer.from([r | 0x80], null, 1)]);
     }
-    r = (x & 0x7F);
+    r = x & 0x7f;
     res = Buffer.concat([res, Buffer.from([r], null, 1)]);
     return res;
   }
 
-  static stringToHex(sin: string) {
+  public static stringToHex(sin: string) {
     // utf8 to latin1
     const s = unescape(encodeURIComponent(sin));
     let h = '';
     for (let i = 0; i < s.length; i++) {
       h += s.charCodeAt(i).toString(16);
     }
-    return h
+    return h;
   }
 
-  static stringFromHex(str: string) {
-    var j;
-    var hexes = str.match(/.{1,4}/g) || [];
-    var back = "";
+  public static stringFromHex(str: string) {
+    let j;
+    const hexes = str.match(/.{1,4}/g) || [];
+    let back = '';
     for (j = 0; j < hexes.length; j++) {
       back += String.fromCharCode(parseInt(hexes[j], 16));
     }
@@ -124,10 +107,24 @@ export class Serializer {
     return back;
   }
 
+  // todo (?) merge with ErgoBox.extractAssets()
+  protected static distinctTokenList(outputs: ErgoBox[]): string[] {
+    // todo use flatMap after switching to es2019
+    const flatTokenList = flat(outputs.map(output => output.assets.map(asset => asset.tokenId)));
+    const seenTokens = new Set();
+    const res = [];
+    for (let i = 0; i < flatTokenList.length; i += 1) {
+      const currId = flatTokenList[i];
+      if (!seenTokens.has(currId)) {
+        res.push(currId);
+        seenTokens.add(currId);
+      }
+    }
+    return res;
+  }
 
   // todo ?
   protected static valueSerialize(v: string) {
     return Buffer.from([]);
   }
-
 }

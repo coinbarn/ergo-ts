@@ -6,3 +6,4 @@ node_modules
 index.js
 /dist/index.html
 /coverage
+dist
