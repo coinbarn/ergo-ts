@@ -1,13 +1,13 @@
 {
-  "name": "@ergoplatform/ergo-js2",
-  "version": "2.0.0",
+  "name": "@coinbarn/ergo-ts",
+  "version": "1.0.0",
   "description": "",
   "main": "client.ts",
   "publishConfig": {
     "access": "public"
   },
   "sideEffects": false,
-  "repository": "https://github.com/catena2w/ergo-js2",
+  "repository": "https://github.com/coinbarn/ergo-ts",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "array.prototype.flat": "^1.2.2",
@@ -64,12 +64,12 @@
     "size": "npm run build && size-limit",
     "styleFix": "npx eslint -c .eslintrc.yml ./src ./tests --ext .js,.ts,.tsx --fix"
   },
-  "author": "Ergoplatform",
+  "author": "Coinbarn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/catena2w/ergo-js2/issues"
+    "url": "https://github.com/coinbarn/ergo-ts/issues"
   },
-  "homepage": "https://github.com/catena2w/ergo-js2",
+  "homepage": "https://github.com/coinbarn/ergo-ts",
   "browserslist": [
     "defaults"
   ]
