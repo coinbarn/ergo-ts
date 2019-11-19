@@ -28,7 +28,8 @@ export class Client {
 
   public async tokenTransfer(recipient: string, tokenId: string, amount: number, sk: string) {
     const tokenInfo = await this.explorer.getTokenInfo(tokenId);
-    const R6: string = tokenInfo.additionalRegisters.R6;
+    const r6 = 'R6';
+    const R6: string = tokenInfo.additionalRegisters[r6];
     const decimals = Number(Serializer.stringFromHex(R6.slice(4, R6.length)));
     const height = await this.explorer.getCurrentHeight();
     const amountInt = amount * Math.pow(10, decimals);
