@@ -1,7 +1,7 @@
 import * as flat from 'array.prototype.flat';
-import { ErgoBox } from './models/ergoBox';
-import { Input } from './models/input';
-import { Transaction } from './models/transaction';
+import {ErgoBox} from './models/ergoBox';
+import {Input} from './models/input';
+import {Transaction} from './models/transaction';
 
 declare const Buffer;
 declare const Object;
@@ -14,11 +14,11 @@ export class Serializer {
     res = Buffer.concat([res, this.intToVlq(out.creationHeight)]);
 
     res = Buffer.concat([res, this.intToVlq(out.assets.length)]);
-    for (let i = 0; i < out.assets.length; i += 1) {
-      const t = out.assets[i].tokenId;
+    for (const asset of out.assets) {
+      const t = asset.tokenId;
       const n = tokenIds.indexOf(t);
       res = Buffer.concat([res, this.intToVlq(n)]);
-      res = Buffer.concat([res, this.intToVlq(out.assets[i].amount)]);
+      res = Buffer.concat([res, this.intToVlq(asset.amount)]);
     }
     const k = Object.keys(out.additionalRegisters).length;
     res = Buffer.concat([res, this.intToVlq(k)]);
@@ -113,8 +113,7 @@ export class Serializer {
     const flatTokenList = flat(outputs.map(output => output.assets.map(asset => asset.tokenId)));
     const seenTokens = new Set();
     const res = [];
-    for (let i = 0; i < flatTokenList.length; i += 1) {
-      const currId = flatTokenList[i];
+    for (const currId of flatTokenList) {
       if (!seenTokens.has(currId)) {
         res.push(currId);
         seenTokens.add(currId);

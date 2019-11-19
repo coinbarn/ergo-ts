@@ -36,7 +36,7 @@ export class Client {
     const tokens = [
       {
         amount: amountInt,
-        tokenId: tokenId,
+        tokenId,
       },
     ];
     const payloadOuts = [new ErgoBox('', minBoxValue, height, new Address(recipient), tokens)];
@@ -55,8 +55,8 @@ export class Client {
     const basePayloadOuts = [new ErgoBox('', feeValue, height, sender)];
     const boxesToSpend = ErgoBox.getSolvingBoxes(myBoxes, basePayloadOuts);
     const token = {
-      tokenId: boxesToSpend[0].id,
       amount: amountInt,
+      tokenId: boxesToSpend[0].id,
     };
     // Reminder: serializedByteArrayInRegister = '\x0e' + intToVlq(bytearray.length) + byteArray
     const registers = ErgoBox.encodeRegisters({

@@ -22,8 +22,8 @@ export class Explorer {
     this.url = url;
     this.apiClient = axios.create({
       baseURL: url,
-      timeout: this.timeout,
       headers: this.headers,
+      timeout: this.timeout,
     });
     this.apiClient.interceptors.response.use(
       response => Promise.resolve(response),
@@ -51,7 +51,7 @@ export class Explorer {
       data: { outputs },
     } = await this.getRequest(`/transactions/${data.spentTransactionId}`);
     const parsedOutputs: ErgoBox[] = outputs.map(o => ErgoBox.formObject(o));
-    return parsedOutputs.find(o => o.assets.find(a => a.tokenId == tokenId) !== undefined);
+    return parsedOutputs.find(o => o.assets.find(a => a.tokenId === tokenId) !== undefined);
   }
 
   public async broadcastTx(signedTransaction: Transaction) {
@@ -60,9 +60,9 @@ export class Explorer {
 
   protected async postRequest(url: string, data) {
     return await this.apiClient({
+      data: data,
       method: 'POST',
-      url,
-      data,
+      url: url,
     });
   }
 

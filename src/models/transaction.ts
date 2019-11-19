@@ -38,7 +38,7 @@ export class Transaction {
 
   private static createFee(payloadOutputs: ErgoBox[], height: number): ErgoBox[] {
     if (
-      payloadOutputs.find(o => o.address == feeMainnetAddress || o.address == feeTestnetAddress)
+      payloadOutputs.find(o => o.address === feeMainnetAddress || o.address === feeTestnetAddress)
     ) {
       return [];
     } else {
@@ -72,7 +72,7 @@ export class Transaction {
     const changeAmount = totalValueIn - totalValueOut;
     if (changeAmount > minBoxValue) {
       outputs.push(new ErgoBox('', changeAmount, height, changeAddress, changeAssets, {}));
-    } else if (changeAmount != 0 || assetsIn.length > 0) {
+    } else if (changeAmount !== 0 || assetsIn.length > 0) {
       throw new Error('Insufficient funds');
     }
 

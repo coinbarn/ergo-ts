@@ -63,7 +63,7 @@ export class Address {
   }
 
   public isP2PK(): boolean {
-    return this.headByte() == 1 || this.headByte() == 17;
+    return this.headByte() === 1 || this.headByte() === 17;
   }
 
   private headByte() {

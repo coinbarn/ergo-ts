@@ -22,9 +22,9 @@ export class ErgoBox {
 
   public static extractAssets(boxes: ErgoBox[]) {
     const assetDict = {};
-    for (let i = 0; i < boxes.length; i += 1) {
-      for (let j = 0; j < boxes[i].assets.length; j += 1) {
-        const currAsset = boxes[i].assets[j];
+    for (const box of boxes) {
+      for (const asset of box.assets) {
+        const currAsset = asset;
 
         if (currAsset.tokenId in assetDict) {
           assetDict[currAsset.tokenId] += currAsset.amount;
@@ -52,10 +52,10 @@ export class ErgoBox {
   }
 
   public static getSolvingBoxes(myBoxes: ErgoBox[], meaningfulOutputs: ErgoBox[], min = 15): ErgoBox[] {
-    const value = meaningfulOutputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
+    const ERGValue = meaningfulOutputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
     const assets = this.extractAssets(meaningfulOutputs);
 
-    const remains = { ERG: value };
+    const remains = { ERG: ERGValue };
     assets.forEach(a => {
       remains[a.tokenId] = (remains[a.tokenId] || 0) + a.amount;
     });
