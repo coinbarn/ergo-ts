@@ -59,7 +59,9 @@ export class Transaction {
       assetsMap[a.tokenId] = (assetsMap[a.tokenId] || 0) + a.amount;
     });
     ErgoBox.extractAssets(restOutputs).forEach(a => {
-      assetsMap[a.tokenId] -= a.amount;
+      if (a.tokenId !== boxesToSpend[0].id) {
+        assetsMap[a.tokenId] -= a.amount;
+      }
     });
     const changeAssets = [];
     Object.keys(assetsMap).forEach(k => {
