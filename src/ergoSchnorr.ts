@@ -60,7 +60,7 @@ export const sign = (msgBytes, sk) => {
 
 export const verify = (msgBytes, sigBytes, pkBytes) => {
   if (sigBytes.length !== 56) {
-    throw new Error();
+    return false;
   }
   const c = new BN(sigBytes.slice(0, 24));
   const z = new BN(sigBytes.slice(24, 56));

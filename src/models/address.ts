@@ -2,7 +2,7 @@ import * as blake from 'blakejs';
 import * as bs58 from 'bs58';
 import * as ec from 'elliptic';
 
-const { curve } = ec.ec('secp256k1');
+const {curve} = ec.ec('secp256k1');
 
 declare const Buffer;
 declare const console;
@@ -37,6 +37,7 @@ export class Address {
     const pk = Buffer.from(curve.g.mul(sk).encodeCompressed());
     return this.fromPk(pk, mainnet);
   }
+
   public address: string;
   public addrBytes;
 
@@ -46,16 +47,11 @@ export class Address {
   }
 
   public isValid(): boolean {
-    try {
-      const bytes = bs58.decode(this.address);
-      const size = bytes.length;
-      const script = bytes.slice(0, size - 4);
-      const checksum = bytes.slice(size - 4, size);
-      const calculatedChecksum = Buffer.from(blake.blake2b(script, null, 32), 'hex').slice(0, 4);
-      return calculatedChecksum.toString('hex') === checksum.toString('hex');
-    } catch (e) {
-      return false;
-    }
+    const size = this.addrBytes.length;
+    const script = this.addrBytes.slice(0, size - 4);
+    const checksum = this.addrBytes.slice(size - 4, size);
+    const calculatedChecksum = Buffer.from(blake.blake2b(script, null, 32), 'hex').slice(0, 4);
+    return calculatedChecksum.toString('hex') === checksum.toString('hex');
   }
 
   public isMainnet(): boolean {
