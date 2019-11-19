@@ -1,5 +1,5 @@
 import * as BN from 'bn.js';
-import {feeMainnetAddress, feeTestnetAddress, feeValue, minBoxValue} from '../constants';
+import { feeMainnetAddress, feeTestnetAddress, feeValue, minBoxValue } from '../constants';
 import { sign } from '../ergoSchnorr';
 import { Serializer } from '../serializer';
 import { Address } from './address';
@@ -8,7 +8,6 @@ import { Input } from './input';
 import { SpendingProof } from './spending-proof';
 
 export class Transaction {
-
   /**
    *
    * @param boxesToSpend - boxes to spend
@@ -37,9 +36,7 @@ export class Transaction {
   }
 
   private static createFee(payloadOutputs: ErgoBox[], height: number): ErgoBox[] {
-    if (
-      payloadOutputs.find(o => o.address === feeMainnetAddress || o.address === feeTestnetAddress)
-    ) {
+    if (payloadOutputs.find(o => o.address === feeMainnetAddress || o.address === feeTestnetAddress)) {
       return [];
     } else {
       return [new ErgoBox('', feeValue, height, feeMainnetAddress)];

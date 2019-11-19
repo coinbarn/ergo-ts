@@ -1,7 +1,7 @@
 import * as flat from 'array.prototype.flat';
-import {ErgoBox} from './models/ergoBox';
-import {Input} from './models/input';
-import {Transaction} from './models/transaction';
+import { ErgoBox } from './models/ergoBox';
+import { Input } from './models/input';
+import { Transaction } from './models/transaction';
 
 declare const Buffer;
 declare const Object;

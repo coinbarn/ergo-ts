@@ -149,7 +149,7 @@ test('transfer Ergo', async () => {
   // uncomment to make real requests
   // const client = new Client();
   const resp = await client.transfer(testAddresses[1].address, 0.000123456, testAddresses[0].sk);
-  console.log(resp.data.id);
+  // console.log(resp.data);
   expect(resp.data.id !== undefined)
     .toBe(true);
 });
@@ -159,7 +159,7 @@ test('issue token', async () => {
   // uncomment to make real requests
   // const client = new Client();
   const resp = await client.tokenIssue('Coinbarn', 123456.789, 3, 'test token of coinbarn.app', testAddresses[0].sk);
-  console.log(resp.data.id);
+  // console.log(resp.data);
   expect(resp.data.id !== undefined)
     .toBe(true);
 });
@@ -170,7 +170,7 @@ test('transfer token', async () => {
   // uncomment to make real requests
   // const client = new Client();
   const resp = await client.tokenTransfer(testAddresses[1].address, `13d24a67432d447e53118d920100c747abb52da8da646bc193f03b47b64a8ac5`, 1.23, testAddresses[0].sk);
-  console.log(resp);
+  // console.log(resp);
   expect(resp.data.id !== undefined).toBe(true);
 });
 

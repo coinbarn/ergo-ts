@@ -7,7 +7,6 @@ import { Transaction } from './models/transaction';
  * Class to interact with explorer
  */
 export class Explorer {
-
   public static readonly testnet: Explorer = new Explorer('https://api-testnet.ergoplatform.com');
 
   public static readonly mainnet: Explorer = new Explorer('https://api.ergoplatform.com');

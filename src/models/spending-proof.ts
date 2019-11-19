@@ -1,5 +1,4 @@
 export class SpendingProof {
-
   public static readonly empty: SpendingProof = new SpendingProof('', {});
   public proofBytes: string;
   public extension: Record<string, any>;

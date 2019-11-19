@@ -7,7 +7,6 @@ import { SpendingProof } from './spending-proof';
 declare const Buffer;
 
 export class ErgoBox {
-
   public static formObject(obj): ErgoBox {
     const id = obj.id || obj.boxId;
     return new ErgoBox(

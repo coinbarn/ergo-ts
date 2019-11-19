@@ -2,13 +2,11 @@ import * as blake from 'blakejs';
 import * as bs58 from 'bs58';
 import * as ec from 'elliptic';
 
-const {curve} = ec.ec('secp256k1');
+const { curve } = ec.ec('secp256k1');
 
 declare const Buffer;
-declare const console;
 
 export class Address {
-
   get publicKey(): string {
     return this.addrBytes.slice(1, 34);
   }
