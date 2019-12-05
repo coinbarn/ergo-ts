@@ -1,8 +1,9 @@
-import { feeValue } from '../constants';
-import { Serializer } from '../serializer';
-import { Address } from './address';
-import { Input } from './input';
-import { SpendingProof } from './spending-proof';
+import {feeValue} from '../constants';
+import {Serializer} from '../serializer';
+import {Address} from './address';
+import {Input} from './input';
+import {ITokens} from "./ITokens";
+import {SpendingProof} from './spending-proof';
 
 declare const Buffer;
 
@@ -19,7 +20,7 @@ export class ErgoBox {
     );
   }
 
-  public static extractAssets(boxes: ErgoBox[]) {
+  public static extractAssets(boxes: ErgoBox[]): ITokens[] {
     const assetDict = {};
     for (const box of boxes) {
       for (const asset of box.assets) {
@@ -33,7 +34,7 @@ export class ErgoBox {
       }
     }
 
-    return Object.entries(assetDict).map(x => ({ tokenId: x[0], amount: Number(x[1]) }));
+    return Object.entries(assetDict).map(x => ({tokenId: x[0], amount: Number(x[1])}));
   }
 
   public static encodeRegisters(obj) {
@@ -51,10 +52,10 @@ export class ErgoBox {
   }
 
   public static getSolvingBoxes(myBoxes: ErgoBox[], meaningfulOutputs: ErgoBox[], min = 15): ErgoBox[] {
-    const ERGValue = meaningfulOutputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
+    const ERGValue = meaningfulOutputs.reduce((sum, {value}) => sum + value, 0) + feeValue;
     const assets = this.extractAssets(meaningfulOutputs);
 
-    const remains = { ERG: ERGValue };
+    const remains = {ERG: ERGValue};
     assets.forEach(a => {
       remains[a.tokenId] = (remains[a.tokenId] || 0) + a.amount;
     });
@@ -88,6 +89,7 @@ export class ErgoBox {
     const sortableKeys = Object.keys(boxes).sort((a, b) => boxes[b].value - boxes[a].value);
     return sortableKeys.map(k => boxes[k]);
   }
+
   public id: string;
   public value: number;
   public creationHeight: number;
