@@ -10,3 +10,4 @@ export const feeTestnetAddress = new Address(
 );
 export const feeValue = 1000000;
 export const minBoxValue = 100000;
+export const unitsInOneErgo = 1000000000;

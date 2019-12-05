@@ -1,22 +1,19 @@
-import { feeValue, minBoxValue } from './constants';
+import { feeValue, minBoxValue, unitsInOneErgo } from './constants';
 import { Explorer } from './explorer';
 import { Address } from './models/address';
 import { ErgoBox } from './models/ergoBox';
 import { Transaction } from './models/transaction';
 import { Serializer } from './serializer';
 
-declare const console;
-
 export class Client {
   public explorer: Explorer;
-  public readonly unitsInOneErgo = 1000000000;
 
   constructor(explorerUri = 'https://api.ergoplatform.com') {
     this.explorer = new Explorer(explorerUri);
   }
 
   public async transfer(recipient: string, amount: number, sk: string) {
-    const amountInt = amount * this.unitsInOneErgo;
+    const amountInt = amount * unitsInOneErgo;
     const height = await this.explorer.getCurrentHeight();
     const myBoxes = await this.explorer.getUnspentOutputs(Address.fromSk(sk));
     const payloadOuts = [new ErgoBox('', amountInt, height, new Address(recipient))];

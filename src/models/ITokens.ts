@@ -1,4 +1,4 @@
 export interface ITokens {
-  tokenId: string
-  amount: number
+  tokenId: string;
+  amount: number;
 }
