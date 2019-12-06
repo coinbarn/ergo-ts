@@ -6,15 +6,22 @@ import { ITokens } from './ITokens';
 import { SpendingProof } from './spending-proof';
 
 declare const Buffer;
+declare const console;
 
 export class ErgoBox {
   public static formObject(obj): ErgoBox {
     const id = obj.id || obj.boxId;
+    let address;
+    if(obj.address !== undefined) {
+      address = new Address(obj.address)
+    } else {
+      Address.fromErgoTree(obj.ergoTree)
+    }
     return new ErgoBox(
       id,
       obj.value,
       obj.creationHeight,
-      new Address(obj.address),
+      address,
       obj.assets,
       obj.additionalRegisters,
     );

@@ -3,6 +3,10 @@ import { Address } from './models/address';
 import { ErgoBox } from './models/ergoBox';
 import { Transaction } from './models/transaction';
 
+
+declare const console;
+
+
 /**
  * Class to interact with explorer
  */

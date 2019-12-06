@@ -4,6 +4,7 @@ import * as ec from 'elliptic';
 
 const { curve } = ec.ec('secp256k1');
 
+declare const console;
 declare const Buffer;
 
 export class Address {
@@ -16,6 +17,27 @@ export class Address {
       return Buffer.concat([Buffer.from([0x00, 0x08, 0xcd]), this.publicKey]).toString('hex');
     } else {
       return this.addrBytes.slice(1, this.addrBytes.length - 4).toString('hex');
+    }
+  }
+
+  public static fromErgoTree(ergoTree: string, mainnet = true): Address {
+    const networkType = mainnet ? 0 : 16;
+    if (ergoTree.startsWith('0008cd')) {
+      const P2PK_TYPE = 1;
+      const prefixByte = Buffer.from([networkType + P2PK_TYPE]);
+
+      const pk = ergoTree.slice(6, 72);
+      const contentBytes = Buffer.from(pk, 'hex');
+      const checksum = Buffer.from(blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32), 'hex');
+      const address = Buffer.concat([prefixByte, contentBytes, checksum]).slice(0, 38);
+      return new Address(bs58.encode(address));
+    } else {
+      const P2S_TYPE = 3;
+      const prefixByte = Buffer.from([networkType + P2S_TYPE]);
+      const contentBytes = Buffer.from(ergoTree, 'hex');
+      const checksum = Buffer.from(blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32), 'hex').slice(0, 4);
+      const address = Buffer.concat([prefixByte, contentBytes, checksum]);
+      return new Address(bs58.encode(address));
     }
   }
 

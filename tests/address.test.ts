@@ -1,6 +1,8 @@
 import { Address } from '../src/models/address';
 import * as constants from './testConstants.js';
 
+declare const console;
+
 const testVectors = [
   {
     address: '9fRusAarL1KkrWQVsxSRVYnvWxaAT2A96cKtNn9tvPh5XUyCisr',
@@ -75,6 +77,15 @@ test('get ergoTree by address', () => {
     if (tv.ergoTree) {
       expect(tv.address.ergoTree)
         .toBe(tv.ergoTree);
+    }
+  });
+});
+
+test('get address by ergoTree', () => {
+  testVectors.forEach((tv) => {
+    if (tv.ergoTree) {
+      const address = Address.fromErgoTree(tv.ergoTree, tv.isMainnet);
+      expect(address.address).toBe(tv.address.address);
     }
   });
 });

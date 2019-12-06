@@ -7,6 +7,8 @@ import { ErgoBox } from './ergoBox';
 import { Input } from './input';
 import { SpendingProof } from './spending-proof';
 
+declare const console;
+
 export class Transaction {
   /**
    *
