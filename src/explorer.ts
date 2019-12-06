@@ -48,6 +48,11 @@ export class Explorer {
     return data.map(o => ErgoBox.formObject(o));
   }
 
+  public async getMempool(): Promise<Transaction[]> {
+    const {data} = await this.getRequest(`/transactions/unconfirmed`);
+    return data.map(o => Transaction.formObject(o));
+  }
+
   public async getTokenInfo(tokenId: string): Promise<ErgoBox> {
     const { data } = await this.getRequest(`/transactions/boxes/${tokenId}`);
     const {

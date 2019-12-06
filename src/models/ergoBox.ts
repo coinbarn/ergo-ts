@@ -15,8 +15,9 @@ export class ErgoBox {
     if(obj.address !== undefined) {
       address = new Address(obj.address)
     } else {
-      Address.fromErgoTree(obj.ergoTree)
+      address = Address.fromErgoTree(obj.ergoTree)
     }
+
     return new ErgoBox(
       id,
       obj.value,
