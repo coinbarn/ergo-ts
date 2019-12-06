@@ -12,20 +12,13 @@ export class ErgoBox {
   public static formObject(obj): ErgoBox {
     const id = obj.id || obj.boxId;
     let address;
-    if(obj.address !== undefined) {
-      address = new Address(obj.address)
+    if (obj.address !== undefined) {
+      address = new Address(obj.address);
     } else {
-      address = Address.fromErgoTree(obj.ergoTree)
+      address = Address.fromErgoTree(obj.ergoTree);
     }
 
-    return new ErgoBox(
-      id,
-      obj.value,
-      obj.creationHeight,
-      address,
-      obj.assets,
-      obj.additionalRegisters,
-    );
+    return new ErgoBox(id, obj.value, obj.creationHeight, address, obj.assets, obj.additionalRegisters);
   }
 
   public static extractAssets(boxes: ErgoBox[]): ITokens[] {

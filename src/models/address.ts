@@ -35,7 +35,8 @@ export class Address {
       const P2S_TYPE = 3;
       const prefixByte = Buffer.from([networkType + P2S_TYPE]);
       const contentBytes = Buffer.from(ergoTree, 'hex');
-      const checksum = Buffer.from(blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32), 'hex').slice(0, 4);
+      const hash = blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32);
+      const checksum = Buffer.from(hash, 'hex').slice(0, 4);
       const address = Buffer.concat([prefixByte, contentBytes, checksum]);
       return new Address(bs58.encode(address));
     }

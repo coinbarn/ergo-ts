@@ -1,6 +1,6 @@
 import {Client} from "../src/client";
 import MockAdapter from "axios-mock-adapter";
-import {Explorer} from "../src";
+import {Address, Explorer} from "../src";
 
 declare const console;
 
@@ -428,14 +428,77 @@ mock.onGet('/transactions/unconfirmed').reply(200, [{
   "size": 609
 }]);
 
+mock.onGet('/transactions/unconfirmed/byAddress/9eaFpf4DR1Fj3WnCvDdgfNNdfa8tAZ1Ga21YchCZpeFSEFtkKDq').reply(200, [{
+    "id": "fb8a0b1444c6dcaa8bc4fa39b2ebc1d1ee06d0f12badc563a117401ffd146cd1",
+    "inputs": [{
+      "boxId": "03dc583c46e7c88e8e2bfabfbc14e0f3820e8dd6a02ebe838a5cc08973c7fffc",
+      "spendingProof": {
+        "proofBytes": "2011f1105b85eb40c0479bfd7a56a23d112a6824c2d2a37145e02416a508c025ba5a3aa668a26b122f35410c6b417045e2315bcbd532c74b",
+        "extension": {}
+      }
+    }, {
+      "boxId": "c04d56a3c25af5681465a287b2b4e926e95fdf06d055ecefbe9cc39813633424",
+      "spendingProof": {
+        "proofBytes": "5d648688517240d4e5d43e5eda01b6b96f6f84f5abbfc1af2218452250254012c2938dad899bab865249f759589dded6530562c482637629",
+        "extension": {}
+      }
+    }, {
+      "boxId": "03dc583c46e7c88e8e2bfabfbc14e0f3820e8dd6a02ebe838a5cc08973c7fffc",
+      "spendingProof": {
+        "proofBytes": "2ad10d3d4a52750326713c644c7917aadc9e787942e79532a3b13e81dfbbeb4aaa38f0582c38f27e9296fad1ae9fa1bafce3bc7cd7598551",
+        "extension": {}
+      }
+    }, {
+      "boxId": "614fcc2879c26534fc62c86dc0a7be3007a49387b07c074585557ea6249521eb",
+      "spendingProof": {
+        "proofBytes": "be196b3e8977cde9589aa92826f7c5bc11b8a17db78c3ad354d1c6622e9d5e1d24a5e9a2ada2bca93dc51e3b83f8d40e9bd417a8c84669d0",
+        "extension": {}
+      }
+    }],
+    "outputs": [{
+      "boxId": "6ad806c58d16a8057eedfcd711a052561adc89036e6801655709f4a3221d7681",
+      "value": 4000000,
+      "creationHeight": 82211,
+      "ergoTree": "0008cd0240bc1de7a4976580ea98e84920e0854a75a70063d56bed5e8939c8b83a1c9887",
+      "assets": [],
+      "additionalRegisters": {}
+    }, {
+      "boxId": "5fda60572212f17c8e70dd3c3df7a5c0095dcef591d21655d68006ca12333788",
+      "value": 577779910,
+      "creationHeight": 82211,
+      "ergoTree": "0008cd020741296f1bf88bab2270929be88f742bb0f6b267643588af85639e1a8c982a41",
+      "assets": [],
+      "additionalRegisters": {}
+    }, {
+      "boxId": "9a8c0375e0914b16caa457a512f0b8109a5870549af843a02b78f7acc5336ff2",
+      "value": 1000000,
+      "creationHeight": 82211,
+      "ergoTree": "1005040004000e36100204a00b08cd0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ea02d192a39a8cc7a701730073011001020402d19683030193a38cc7b2a57300000193c2b2a57301007473027303830108cdeeac93b1a57304",
+      "assets": [],
+      "additionalRegisters": {}
+    }],
+    "size": 568
+  }]
+);
+
 test('mempool transactions', async () => {
 
-  // uncomment to make real requests
-  // const client = new Client();
-  const mempoolTxs = await explorer.getMempool();
+  const mempoolTxs = await explorer.getUnconfirmed();
   expect(mempoolTxs.length).toBe(10);
   const lastTx = mempoolTxs[9];
   expect(lastTx.inputs.length).toBe(2);
+  expect(lastTx.dataInputs.length).toBe(0);
+  expect(lastTx.outputs.length).toBe(3);
+
+});
+
+test('mempool transactions by address', async () => {
+
+  const address = Address.fromErgoTree("0008cd020741296f1bf88bab2270929be88f742bb0f6b267643588af85639e1a8c982a41");
+  const mempoolTxs = await explorer.getUnconfirmed(address);
+  expect(mempoolTxs.length).toBe(1);
+  const lastTx = mempoolTxs[0];
+  expect(lastTx.inputs.length).toBe(4);
   expect(lastTx.dataInputs.length).toBe(0);
   expect(lastTx.outputs.length).toBe(3);
 

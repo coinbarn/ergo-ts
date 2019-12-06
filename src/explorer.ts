@@ -3,9 +3,7 @@ import { Address } from './models/address';
 import { ErgoBox } from './models/ergoBox';
 import { Transaction } from './models/transaction';
 
-
 declare const console;
-
 
 /**
  * Class to interact with explorer
@@ -48,8 +46,13 @@ export class Explorer {
     return data.map(o => ErgoBox.formObject(o));
   }
 
-  public async getMempool(): Promise<Transaction[]> {
-    const {data} = await this.getRequest(`/transactions/unconfirmed`);
+  public async getUnconfirmed(address?: Address): Promise<Transaction[]> {
+    let data;
+    if(address === undefined) {
+      data  = (await this.getRequest(`/transactions/unconfirmed`)).data;
+    } else {
+      data  = (await this.getRequest(`/transactions/unconfirmed/byAddress/${address.address}`)).data;
+    }
     return data.map(o => Transaction.formObject(o));
   }
 
