@@ -82,7 +82,7 @@ export class ErgoBox {
         }
       }
     }
-    return null;
+    throw new Error(`Not enough solving boxes, remains: ${JSON.stringify(remains)}`);
   }
 
   public static sort(boxes) {
