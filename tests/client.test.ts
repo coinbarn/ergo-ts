@@ -144,11 +144,11 @@ mock.onGet('/transactions/5c131f8ae9fa68dab1bac654aa66d364bc7da12107f337a0c9d3d8
 mock.onPost('/transactions/send')
   .reply(200, {id: '3ebc014bb19a5098820bef805f51dc3d61713003c8e2fae98e27e6e9d030e388'});
 
-test('transfer Ergo', async () => {
+test('ergTransfer Ergo', async () => {
 
   // uncomment to make real requests
   // const client = new Client();
-  const resp = await client.transfer(testAddresses[1].address, 0.000123456, testAddresses[0].sk);
+  const resp = await client.transfer(testAddresses[0].sk, testAddresses[1].address, 0.000123456);
   // console.log(resp.data);
   expect(resp.data.id !== undefined)
     .toBe(true);
@@ -165,11 +165,11 @@ test('issue token', async () => {
 });
 
 
-test('transfer token', async () => {
+test('ergTransfer token', async () => {
 
   // uncomment to make real requests
   // const client = new Client();
-  const resp = await client.tokenTransfer(testAddresses[1].address, `13d24a67432d447e53118d920100c747abb52da8da646bc193f03b47b64a8ac5`, 1.23, testAddresses[0].sk);
+  const resp = await client.transfer(testAddresses[0].sk, testAddresses[1].address, 1.23, '13d24a67432d447e53118d920100c747abb52da8da646bc193f03b47b64a8ac5');
   // console.log(resp);
   expect(resp.data.id !== undefined).toBe(true);
 });
