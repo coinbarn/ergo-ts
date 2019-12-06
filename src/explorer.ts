@@ -56,6 +56,12 @@ export class Explorer {
     return data.map(o => Transaction.formObject(o));
   }
 
+  public async getTransactions(address: Address): Promise<Transaction[]> {
+    const { data } = await this.getRequest(`/addresses/${address.address}/transactions`);
+
+    return data.items.map(o => Transaction.formObject(o));
+  }
+
   public async getTokenInfo(tokenId: string): Promise<ErgoBox> {
     const { data } = await this.getRequest(`/transactions/boxes/${tokenId}`);
     const {
