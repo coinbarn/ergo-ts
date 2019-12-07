@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { Address } from './models/address';
 import { ErgoBox } from './models/ergoBox';
+import { IIdObject } from './models/IIdObject';
 import { Transaction } from './models/transaction';
 
 declare const console;
@@ -43,7 +44,7 @@ export class Explorer {
   public async getUnspentOutputs(address: Address): Promise<ErgoBox[]> {
     const { data } = await this.getRequest(`/transactions/boxes/byAddress/unspent/${address.address}`);
 
-    return data.map(o => ErgoBox.formObject(o));
+    return this.uniqueById(data.map(o => ErgoBox.formObject(o)));
   }
 
   public async getUnconfirmed(address?: Address): Promise<Transaction[]> {
@@ -53,7 +54,7 @@ export class Explorer {
     } else {
       data = (await this.getRequest(`/transactions/unconfirmed/byAddress/${address.address}`)).data;
     }
-    return data.map(o => Transaction.formObject(o));
+    return this.uniqueById(data.map(o => Transaction.formObject(o)));
   }
 
   public async getTransactions(address: Address): Promise<Transaction[]> {
@@ -88,5 +89,15 @@ export class Explorer {
       method: 'GET',
       url,
     });
+  }
+
+  private uniqueById<T extends IIdObject>(elements: T[]): T[] {
+    const uniqueBoxes = [];
+    elements.forEach(b => {
+      if (uniqueBoxes.find(x => x.id === b.id) === undefined) {
+        uniqueBoxes.push(b);
+      }
+    });
+    return uniqueBoxes;
   }
 }

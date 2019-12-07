@@ -4,12 +4,13 @@ import { sign } from '../ergoSchnorr';
 import { Serializer } from '../serializer';
 import { Address } from './address';
 import { ErgoBox } from './ergoBox';
+import { IIdObject } from './IIdObject';
 import { Input } from './input';
 import { SpendingProof } from './spending-proof';
 
 declare const console;
 
-export class Transaction {
+export class Transaction implements IIdObject {
   /**
    *
    * @param boxesToSpend - boxes to spend
