@@ -48,10 +48,10 @@ export class Explorer {
 
   public async getUnconfirmed(address?: Address): Promise<Transaction[]> {
     let data;
-    if(address === undefined) {
-      data  = (await this.getRequest(`/transactions/unconfirmed`)).data;
+    if (address === undefined) {
+      data = (await this.getRequest(`/transactions/unconfirmed`)).data;
     } else {
-      data  = (await this.getRequest(`/transactions/unconfirmed/byAddress/${address.address}`)).data;
+      data = (await this.getRequest(`/transactions/unconfirmed/byAddress/${address.address}`)).data;
     }
     return data.map(o => Transaction.formObject(o));
   }
