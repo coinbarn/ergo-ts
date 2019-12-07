@@ -913,6 +913,10 @@ test('transactions by address', async () => {
 
   // check that single transaction parsed correctly
   const tx = txs[1];
+  expect(tx.id).toBe('274cc423c2465c086147d6971beecd9ebaa49b9e4d2ae0d95ddd482524427f81');
+  expect(tx.headerId).toBe('53db5852ce47d1226b815067a3926a65405d57bf06d5178eb6516cf717d59e57');
+  expect(tx.timestamp).toBe(1575555611949);
+  expect(tx.confirmations).toBe(924);
   expect(tx.inputs.length).toBe(3);
   expect(tx.dataInputs.length).toBe(0);
   expect(tx.outputs.length).toBe(3);
@@ -925,8 +929,8 @@ test('transactions by address', async () => {
 
   // check preservation rule
   txs.forEach(t => {
-    const inValue = t.inputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
-    const outValue = t.outputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
+    const inValue = t.inputs.reduce((sum, { value }) => sum + value, 0);
+    const outValue = t.outputs.reduce((sum, { value }) => sum + value, 0);
     expect(outValue).toBe(inValue);
   })
 

@@ -34,7 +34,7 @@ export class Transaction {
     const inputs = obj.inputs.map(i => Input.formObject(i));
     const dataInputs = obj.dataInputs === undefined ? [] : obj.dataInputs.map(i => new Input(i.boxId));
     const outputs = obj.outputs.map(i => ErgoBox.formObject(i));
-    return new Transaction(inputs, outputs, dataInputs);
+    return new Transaction(inputs, outputs, dataInputs, obj.id, obj.timestamp, obj.headerId, obj.confirmationsCount);
   }
 
   private static createFee(payloadOutputs: ErgoBox[], height: number): ErgoBox[] {
@@ -82,11 +82,19 @@ export class Transaction {
   public inputs: Input[];
   public dataInputs: Input[];
   public outputs: ErgoBox[];
+  public timestamp?: number;
+  public confirmations?: number;
+  public headerId?: string;
+  public id?: string;
 
-  constructor(inputs: Input[], outputs: ErgoBox[], dataInputs: Input[] = []) {
+  constructor(inputs: Input[], outputs: ErgoBox[], dataInputs: Input[] = [], id?: string, timestamp?: number, headerId?: string, confirmationsCount?: number) {
     this.inputs = inputs;
     this.dataInputs = dataInputs;
     this.outputs = outputs;
+    this.id = id;
+    this.timestamp = timestamp;
+    this.confirmations = confirmationsCount;
+    this.headerId = headerId;
   }
 
   public sign(sk: string): Transaction {
