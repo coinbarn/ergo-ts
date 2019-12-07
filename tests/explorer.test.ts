@@ -1,6 +1,6 @@
 import {Client} from "../src/client";
 import MockAdapter from "axios-mock-adapter";
-import {Address, Explorer} from "../src";
+import {Address, Explorer, feeValue} from "../src";
 
 declare const console;
 
@@ -910,10 +910,26 @@ test('transactions by address', async () => {
   const address = new Address("9gU3czAt9q4fQPRWBriBbpfLbRP7JrXRmB7kowtwdyw66PMRmaY");
   const txs = await explorer.getTransactions(address);
   expect(txs.length).toBe(8);
+
+  // check that single transaction parsed correctly
   const tx = txs[1];
   expect(tx.inputs.length).toBe(3);
   expect(tx.dataInputs.length).toBe(0);
   expect(tx.outputs.length).toBe(3);
+
+  // check that input transaction parsed correctly
+  const input = tx.inputs[0];
+  expect(input.address).toBe(address.address);
+  expect(input.outputTransactionId).toBe("2cb08ad7c765e060697a746b591a7c3ca8963f212dcc6af45990630a2f2b4a12");
+  expect(input.value).toBe(123456);
+
+  // check preservation rule
+  txs.forEach(t => {
+    const inValue = t.inputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
+    const outValue = t.outputs.reduce((sum, { value }) => sum + value, 0) + feeValue;
+    expect(outValue).toBe(inValue);
+  })
+
 
 });
 

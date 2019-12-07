@@ -1,6 +1,6 @@
 {
   "name": "@coinbarn/ergo-ts",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "The library for Ergo platform written in TypeScript and compiled to JavaScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

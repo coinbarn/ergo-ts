@@ -117,6 +117,6 @@ export class ErgoBox {
   }
 
   public toInput(): Input {
-    return new Input(this.id, SpendingProof.empty);
+    return new Input(this.id);
   }
 }
