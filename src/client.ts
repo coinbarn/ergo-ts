@@ -22,7 +22,7 @@ export class Client {
     }
   }
 
-  public async tokenIssue(name: string, amount: number, decimals: number, description: string, sk: string) {
+  public async tokenIssue(sk: string, name: string, amount: number, decimals: number, description: string) {
     const amountInt = amount * Math.pow(10, decimals);
     const height = await this.explorer.getCurrentHeight();
     const sender: Address = Address.fromSk(sk);

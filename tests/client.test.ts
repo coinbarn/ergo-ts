@@ -158,7 +158,7 @@ test('issue token', async () => {
 
   // uncomment to make real requests
   // const client = new Client();
-  const resp = await client.tokenIssue('Coinbarn', 123456.789, 3, 'test token of coinbarn.app', testAddresses[0].sk);
+  const resp = await client.tokenIssue(testAddresses[0].sk,'Coinbarn', 123456.789, 3, 'test token of coinbarn.app');
   // console.log(resp.data);
   expect(resp.data.id !== undefined)
     .toBe(true);

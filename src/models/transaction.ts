@@ -87,7 +87,15 @@ export class Transaction {
   public headerId?: string;
   public id?: string;
 
-  constructor(inputs: Input[], outputs: ErgoBox[], dataInputs: Input[] = [], id?: string, timestamp?: number, headerId?: string, confirmationsCount?: number) {
+  constructor(
+    inputs: Input[],
+    outputs: ErgoBox[],
+    dataInputs: Input[] = [],
+    id?: string,
+    timestamp?: number,
+    headerId?: string,
+    confirmationsCount?: number,
+  ) {
     this.inputs = inputs;
     this.dataInputs = dataInputs;
     this.outputs = outputs;

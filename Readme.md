@@ -73,7 +73,7 @@ const recipient = '9gsLq5a12nJe33nKtjMe7NPY7o8CQAtjS9amDgALbebv1wmRXrv';
 client.transfer(sk, recipient, 0.019);
 
 // Issue 123456.789 Coinbarn tokens with 3 decimals each
-client.tokenIssue('Coinbarn', 123456.789, 3, 'Description of this token', sk);
+client.tokenIssue(sk, 'Coinbarn', 123456.789, 3, 'Description of this token');
 
 // Transfer 1.23 tokens with id 13d24a67432d447e53118d920100c747abb52da8da646bc193f03b47b64a8ac5 to the recipient
 client.transfer(sk, recipient, 1.23, '13d24a67432d447e53118d920100c747abb52da8da646bc193f03b47b64a8ac5');

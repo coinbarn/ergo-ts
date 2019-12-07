@@ -13,11 +13,13 @@ export class Input {
   public boxId: string;
   public spendingProof: SpendingProof;
 
-  constructor(boxId: string,
-              spendingProof: SpendingProof = SpendingProof.empty,
-              address?: string,
-              value?: number,
-              outputTransactionId?: string) {
+  constructor(
+    boxId: string,
+    spendingProof: SpendingProof = SpendingProof.empty,
+    address?: string,
+    value?: number,
+    outputTransactionId?: string,
+  ) {
     this.boxId = boxId;
     this.spendingProof = spendingProof;
     this.address = address;
