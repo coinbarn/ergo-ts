@@ -1,3 +1,4 @@
+import * as Enc from '@root/encoding/hex';
 import * as flat from 'array.prototype.flat';
 import { ErgoBox } from './models/ergoBox';
 import { Input } from './models/input';
@@ -86,25 +87,12 @@ export class Serializer {
     return res;
   }
 
-  public static stringToHex(sin: string) {
-    // utf8 to latin1
-    const s = unescape(encodeURIComponent(sin));
-    let h = '';
-    for (let i = 0; i < s.length; i++) {
-      h += s.charCodeAt(i).toString(16);
-    }
-    return h;
+  public static stringToHex(str: string) {
+    return Enc.strToHex(str);
   }
 
   public static stringFromHex(str: string) {
-    let j;
-    const hexes = str.match(/.{1,4}/g) || [];
-    let back = '';
-    for (j = 0; j < hexes.length; j++) {
-      back += String.fromCharCode(parseInt(hexes[j], 16));
-    }
-
-    return back;
+    return Enc.hexToStr(str);
   }
 
   // todo (?) merge with ErgoBox.extractAssets()

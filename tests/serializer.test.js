@@ -1,5 +1,5 @@
-import { Serializer } from '../src/serializer';
-import { Transaction } from '../src/models/transaction';
+import {Serializer} from '../src/serializer';
+import {Transaction} from '../src/models/transaction';
 
 
 test('serialization test vector', () => {
@@ -30,6 +30,27 @@ test('serialization test vector', () => {
       .toBe(tv.bytesStr);
   });
 });
+
+
+test('stringFromHex and back', () => {
+  const pairs = [
+    ['test', '74657374'],
+    ['ERG', '455247'],
+    ['Token name', '546f6b656e206e616d65'],
+    ['--Token--', '2d2d546f6b656e2d2d'],
+    ['1234', '31323334'],
+    ['32123', '3332313233'],
+    ['-1-4_!@', '2d312d345f2140'],
+  ];
+  pairs.forEach((str) => {
+    const encoded = Serializer.stringToHex(str[0]);
+    expect(encoded).toBe(str[1]);
+    const decoded = Serializer.stringFromHex(encoded);
+    expect(decoded).toBe(str[0]);
+  });
+
+});
+
 
 test('intToVlq test vectors', () => {
 

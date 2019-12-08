@@ -43,7 +43,7 @@ export class ErgoBox {
     for (let i = 4; i <= 10; i += 1) {
       const reg = obj['R' + i];
       if (reg !== undefined) {
-        const byteArray = Serializer.stringToHex(reg);
+        const byteArray = Serializer.stringToHex(reg.toString());
         const b1 = Buffer.from([0x0e]);
         const b2 = Buffer.from(Serializer.intToVlq(byteArray.length / 2)).toString('hex');
         encoded['R' + i] = b1.toString('hex') + b2 + byteArray;
