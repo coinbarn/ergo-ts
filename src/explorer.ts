@@ -1,10 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios';
 import { Address } from './models/address';
 import { ErgoBox } from './models/ergoBox';
 import { IIdObject } from './models/IIdObject';
 import { Transaction } from './models/transaction';
-
-declare const console;
 
 /**
  * Class to interact with explorer
@@ -76,7 +74,7 @@ export class Explorer {
     return await this.postRequest('/transactions/send', signedTransaction);
   }
 
-  protected async postRequest(url: string, data) {
+  protected async postRequest(url: string, data): Promise<AxiosResponse> {
     return await this.apiClient({
       data: data,
       method: 'POST',
