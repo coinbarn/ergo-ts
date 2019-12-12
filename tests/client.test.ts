@@ -174,4 +174,14 @@ test('ergTransfer token', async () => {
   expect(resp.data.id !== undefined).toBe(true);
 });
 
+test('transfer max amount of assets', async () => {
+
+  // uncomment to make real requests
+  // const client = new Client();
+  const resp = await client.transferInt(testAddresses[0].sk, testAddresses[1].address, 100000000, '13d24a67432d447e53118d920100c747abb52da8da646bc193f03b47b64a8ac5');
+  console.log(resp);
+  expect(resp.data.id !== undefined).toBe(true);
+});
+
+
 

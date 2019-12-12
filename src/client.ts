@@ -5,6 +5,8 @@ import { ErgoBox } from './models/ergoBox';
 import { Transaction } from './models/transaction';
 import { Serializer } from './serializer';
 
+declare const console;
+
 export class Client {
   public explorer: Explorer;
 

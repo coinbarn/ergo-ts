@@ -68,7 +68,9 @@ export class Transaction implements IIdObject {
     });
     const changeAssets = [];
     Object.keys(assetsMap).forEach(k => {
-      changeAssets.push({ tokenId: k, amount: assetsMap[k] });
+      if (assetsMap[k] > 0) {
+        changeAssets.push({ tokenId: k, amount: assetsMap[k] });
+      }
     });
 
     const changeAmount = totalValueIn - totalValueOut;

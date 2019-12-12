@@ -70,7 +70,7 @@ export class ErgoBox {
       }
       box.assets.forEach(a => {
         if (remains[a.tokenId] > 0) {
-          remains[a.tokenId] -= box.value;
+          remains[a.tokenId] -= a.amount;
         }
       });
       const positiveRemainingToken = Object.values(remains).find(o => o > 0);
