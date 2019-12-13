@@ -1,4 +1,4 @@
-import { feeValue, minBoxValue, unitsInOneErgo } from './constants';
+import { feeValue, heightDelta, minBoxValue, unitsInOneErgo } from './constants';
 import { Explorer } from './explorer';
 import { Address } from './models/address';
 import { ErgoBox } from './models/ergoBox';
@@ -53,7 +53,7 @@ export class Client {
     const height = await this.explorer.getCurrentHeight();
     const sender: Address = Address.fromSk(sk);
     const myBoxes = await this.explorer.getUnspentOutputs(sender);
-    const basePayloadOuts = [new ErgoBox('', feeValue, height, sender)];
+    const basePayloadOuts = [new ErgoBox('', feeValue, height - heightDelta, sender)];
     const boxesToSpend = ErgoBox.getSolvingBoxes(myBoxes, basePayloadOuts);
     const token = {
       amount: amountInt,
@@ -65,7 +65,7 @@ export class Client {
       R5: description,
       R6: decimals,
     });
-    const payloadOutsWithTokens = [new ErgoBox('', minBoxValue, height, sender, [token], registers)];
+    const payloadOutsWithTokens = [new ErgoBox('', minBoxValue, height - heightDelta, sender, [token], registers)];
     const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOutsWithTokens);
     const signedTx = unsignedTx.sign(sk);
     return await this.explorer.broadcastTx(signedTx);
@@ -74,7 +74,7 @@ export class Client {
   private async ergTransfer(recipient: string, amountInt: number, sk: string) {
     const height = await this.explorer.getCurrentHeight();
     const myBoxes = await this.explorer.getUnspentOutputs(Address.fromSk(sk));
-    const payloadOuts = [new ErgoBox('', amountInt, height, new Address(recipient))];
+    const payloadOuts = [new ErgoBox('', amountInt, height - heightDelta, new Address(recipient))];
     const boxesToSpend = ErgoBox.getSolvingBoxes(myBoxes, payloadOuts);
     const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOuts);
     const signedTx = unsignedTx.sign(sk);
@@ -89,7 +89,7 @@ export class Client {
         tokenId,
       },
     ];
-    const payloadOuts = [new ErgoBox('', minBoxValue, height, new Address(recipient), tokens)];
+    const payloadOuts = [new ErgoBox('', minBoxValue, height - heightDelta, new Address(recipient), tokens)];
     const myBoxes = await this.explorer.getUnspentOutputs(Address.fromSk(sk));
     const boxesToSpend = ErgoBox.getSolvingBoxes(myBoxes, payloadOuts);
     const unsignedTx = Transaction.fromOutputs(boxesToSpend, payloadOuts);
