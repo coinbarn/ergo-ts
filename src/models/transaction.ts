@@ -8,18 +8,17 @@ import { IIdObject } from './IIdObject';
 import { Input } from './input';
 import { SpendingProof } from './spending-proof';
 
-declare const console;
-
 export class Transaction implements IIdObject {
   /**
    *
    * @param boxesToSpend - boxes to spend
    * @param payloadOutputs - outputs without fee and change
+   * @param fee - fee to pay
    */
-  public static fromOutputs(boxesToSpend: ErgoBox[], payloadOutputs: ErgoBox[]): Transaction {
+  public static fromOutputs(boxesToSpend: ErgoBox[], payloadOutputs: ErgoBox[], fee: number = feeValue): Transaction {
     let outputs = payloadOutputs;
     const height = payloadOutputs[0].creationHeight;
-    const feeBox = this.createFee(payloadOutputs, height);
+    const feeBox = this.createFee(payloadOutputs, height, fee);
     outputs = outputs.concat(feeBox);
     const realChangeAddress = boxesToSpend[0].address;
     const changeOuts = this.createChangeOutputs(boxesToSpend, outputs, realChangeAddress, height);
@@ -38,11 +37,11 @@ export class Transaction implements IIdObject {
     return new Transaction(inputs, outputs, dataInputs, obj.id, obj.timestamp, obj.headerId, obj.confirmationsCount);
   }
 
-  private static createFee(payloadOutputs: ErgoBox[], height: number): ErgoBox[] {
+  private static createFee(payloadOutputs: ErgoBox[], height: number, fee: number): ErgoBox[] {
     if (payloadOutputs.find(o => o.address === feeMainnetAddress || o.address === feeTestnetAddress)) {
       return [];
     } else {
-      return [new ErgoBox('', feeValue, height, feeMainnetAddress)];
+      return [new ErgoBox('', fee, height, feeMainnetAddress)];
     }
   }
 
