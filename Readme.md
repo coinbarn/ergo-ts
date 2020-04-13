@@ -65,7 +65,7 @@ Sending transactions :
 ```typescript
 import {Client} from "@coinbarn/ergo-ts";
 
-const client = new Client('https://api.ergoplatform.com');
+const client = new Client('https://new-explorer.ergoplatform.com');
 const sk = '8e6993a4999f009c03d9457ffcf8ff3d840ae78332c959c8e806a53fbafbbee1';
 const recipient = '9gsLq5a12nJe33nKtjMe7NPY7o8CQAtjS9amDgALbebv1wmRXrv';
 

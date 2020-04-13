@@ -10,7 +10,7 @@ declare const console;
 export class Client {
   public explorer: Explorer;
 
-  constructor(explorerUri = 'https://api.ergoplatform.com') {
+  constructor(explorerUri = 'https://new-explorer.ergoplatform.com') {
     this.explorer = new Explorer(explorerUri);
   }
 

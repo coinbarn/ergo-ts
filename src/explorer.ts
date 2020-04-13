@@ -10,7 +10,7 @@ import { Transaction } from './models/transaction';
 export class Explorer {
   public static readonly testnet: Explorer = new Explorer('https://api-testnet.ergoplatform.com');
 
-  public static readonly mainnet: Explorer = new Explorer('https://api.ergoplatform.com');
+  public static readonly mainnet: Explorer = new Explorer('https://new-explorer.ergoplatform.com');
   public readonly apiClient: AxiosInstance;
   protected url: string;
   protected timeout: number = 1000 * 5;
