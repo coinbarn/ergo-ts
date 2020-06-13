@@ -1,5 +1,5 @@
 export { Client } from './client';
-export { Address } from './models/address';
+export { Network, AddressKind, Address } from './models/address';
 export { ErgoBox } from './models/ergoBox';
 export { Input } from './models/input';
 export { SpendingProof } from './models/spending-proof';

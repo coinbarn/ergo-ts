@@ -7,24 +7,32 @@ const { curve } = ec.ec('secp256k1');
 declare const console;
 declare const Buffer;
 
+export enum Network {
+  Mainnet = 0 << 4,
+  Testnet = 1 << 4,
+};
+export enum AddressKind {
+  P2PK = 1,
+  P2SH = 2,
+  P2S = 3,
+};
+
 export class Address {
   get publicKey(): string {
     return this.addrBytes.slice(1, 34);
   }
 
   get ergoTree(): string {
-    if (this.isP2PK()) {
+    if (this.getType() === AddressKind.P2PK) {
       return Buffer.concat([Buffer.from([0x00, 0x08, 0xcd]), this.publicKey]).toString('hex');
     } else {
       return this.addrBytes.slice(1, this.addrBytes.length - 4).toString('hex');
     }
   }
 
-  public static fromErgoTree(ergoTree: string, mainnet = true): Address {
-    const networkType = mainnet ? 0 : 16;
+  public static fromErgoTree(ergoTree: string, network: Network = Network.Mainnet): Address {
     if (ergoTree.startsWith('0008cd')) {
-      const P2PK_TYPE = 1;
-      const prefixByte = Buffer.from([networkType + P2PK_TYPE]);
+      const prefixByte = Buffer.from([network + AddressKind.P2PK]);
 
       const pk = ergoTree.slice(6, 72);
       const contentBytes = Buffer.from(pk, 'hex');
@@ -32,8 +40,7 @@ export class Address {
       const address = Buffer.concat([prefixByte, contentBytes, checksum]).slice(0, 38);
       return new Address(bs58.encode(address));
     } else {
-      const P2S_TYPE = 3;
-      const prefixByte = Buffer.from([networkType + P2S_TYPE]);
+      const prefixByte = Buffer.from([network + AddressKind.P2S]);
       const contentBytes = Buffer.from(ergoTree, 'hex');
       const hash = blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32);
       const checksum = Buffer.from(hash, 'hex').slice(0, 4);
@@ -42,11 +49,8 @@ export class Address {
     }
   }
 
-  public static fromPk(pk: string, mainnet = true): Address {
-    const P2PK_TYPE = 1;
-    const networkType = mainnet ? 0 : 16;
-
-    const prefixByte = Buffer.from([networkType + P2PK_TYPE]);
+  public static fromPk(pk: string, network: Network = Network.Mainnet): Address {
+    const prefixByte = Buffer.from([network + AddressKind.P2PK]);
     const contentBytes = Buffer.from(pk, 'hex');
     const checksum = Buffer.from(blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32), 'hex');
     const address = Buffer.concat([prefixByte, contentBytes, checksum]).slice(0, 38);
@@ -54,9 +58,9 @@ export class Address {
     return new Address(bs58.encode(address));
   }
 
-  public static fromSk(sk: string, mainnet = true): Address {
+  public static fromSk(sk: string, network: Network = Network.Mainnet): Address {
     const pk = Buffer.from(curve.g.mul(sk).encodeCompressed());
-    return this.fromPk(pk, mainnet);
+    return this.fromPk(pk, network);
   }
 
   public address: string;
@@ -75,12 +79,12 @@ export class Address {
     return calculatedChecksum.toString('hex') === checksum.toString('hex');
   }
 
-  public isMainnet(): boolean {
-    return this.headByte() < 16;
+  public getNetwork(): Network {
+    return this.headByte() & 0xF0;
   }
 
-  public isP2PK(): boolean {
-    return this.headByte() === 1 || this.headByte() === 17;
+  public getType(): AddressKind {
+    return this.headByte() & 0xF;
   }
 
   private headByte() {
