@@ -1,12 +1,13 @@
 {
   "name": "@coinbarn/ergo-ts",
-  "version": "0.2.19",
+  "version": "0.3.0",
   "description": "The library for Ergo platform written in TypeScript and compiled to JavaScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "yarn build",
     "prepublishOnly": "npm test && npm run lint",
+    "publishPublic": "yarn build && npm publish --access public",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push origin master && git push --tags",
