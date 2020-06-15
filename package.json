@@ -14,6 +14,7 @@
     "test": "jest",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "flowgen": "for i in $(find dist -type f -name '*.d.ts'); do sh -c \"flowgen $i -o ${i%.*.*}.js.flow\"; done;",
     "lint": "tslint -p tsconfig.json --fix"
   },
   "repository": {
