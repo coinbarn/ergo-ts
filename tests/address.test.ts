@@ -115,3 +115,27 @@ test('address from sk', () => {
   });
 
 });
+
+test('checked construction from base58', () => {
+  testVectors.forEach((o) => {
+    if (o.isValid) {
+      expect(() => Address.fromBase58(o.address.address))
+        .not.toThrow();
+    } else {
+      expect(() => Address.fromBase58(o.address.address))
+        .toThrow();
+    }
+  });
+});
+
+test('checked construction from bytes', () => {
+  testVectors.forEach((o) => {
+    if (o.isValid) {
+      expect(() => Address.fromBytes(o.address.addrBytes))
+        .not.toThrow();
+    } else {
+      expect(() => Address.fromBytes(o.address.addrBytes))
+        .toThrow();
+    }
+  });
+});
