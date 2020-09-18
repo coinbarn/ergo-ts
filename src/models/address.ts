@@ -64,7 +64,7 @@ export class Address {
   }
 
   public address: string;
-  public addrBytes;
+  public addrBytes: Buffer;
 
   constructor(address: string) {
     this.address = address;
