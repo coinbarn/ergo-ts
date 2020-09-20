@@ -18,7 +18,7 @@ export enum AddressKind {
 };
 
 export class Address {
-  get publicKey(): string {
+  get publicKey(): Buffer {
     return this.addrBytes.slice(1, 34);
   }
 
@@ -64,11 +64,24 @@ export class Address {
   }
 
   public address: string;
-  public addrBytes;
+  public addrBytes: Buffer;
 
   constructor(address: string) {
     this.address = address;
     this.addrBytes = bs58.decode(this.address);
+  }
+
+  public static fromBase58(address: string): Address {
+    const addr = new Address(address);
+    if (!addr.isValid()) {
+      throw new Error(`Invalid Ergo address ${address}`);
+    }
+    return addr;
+  }
+
+  public static fromBytes(bytes: Buffer): Address {
+    const address = bs58.encode(bytes);
+    return Address.fromBase58(address);
   }
 
   public isValid(): boolean {
