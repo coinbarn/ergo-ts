@@ -38,7 +38,9 @@ export class Transaction implements IIdObject {
   }
 
   private static createFee(payloadOutputs: ErgoBox[], height: number, fee: number): ErgoBox[] {
-    if (payloadOutputs.find(o => o.address === feeMainnetAddress || o.address === feeTestnetAddress)) {
+    if (payloadOutputs.find(o => (
+      o.address.address === feeMainnetAddress.address || o.address.address === feeTestnetAddress.address)
+    )) {
       return [];
     } else {
       return [new ErgoBox('', fee, height, feeMainnetAddress)];
